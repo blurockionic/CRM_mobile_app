@@ -5,10 +5,12 @@ package com.example.employeecrm.model
 data class LoginRequest(val email: String, val password: String)
 
 data class LoginResponse(val success:Boolean, val message: String, val token: String, val user: User)
-data class EmployeeDetails(val success:Boolean, val message: String, val employee: Array<Employee>)
+data class EmployeeDetails(val success:Boolean, val message: String, val data: Array<Employee>)
 data class MyProfile(val success:Boolean, val message: String,  val user: User)
 
 data class ProjectDetailsRes(val success: Boolean, val message: String, val allProject: MutableList<Project>)
+
+data class Success(val success: Boolean, val message: String)
 
 
 
@@ -60,6 +62,17 @@ data class Project(
     val isCompleted: Boolean,
     val isScrap: Boolean,
     val completedPercent: Int,
+)
+
+//new project data class
+data class ProjectRequest(
+    val projectName : String,
+    val startDate: String,
+    val subDate:String,
+    val projectDes:String,
+    val managerName:String,
+    val priority: String,
+    val team:String
 )
 
 

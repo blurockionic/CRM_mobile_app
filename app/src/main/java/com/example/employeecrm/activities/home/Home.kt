@@ -27,6 +27,7 @@ import com.example.employeecrm.model.Employee
 import com.example.employeecrm.model.LoginManager
 import com.example.employeecrm.model.LoginResponse
 import com.example.employeecrm.model.Project
+import com.example.employeecrm.model.ProjectRequest
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -56,10 +57,15 @@ class Home : AppCompatActivity() {
     private val managers : MutableList<Employee> = mutableListOf()
     //priority
     val priorities = arrayOf("Low", "Medium", "High") // Array of priorities
+    val teams = arrayOf("App Development", "Web Development", "Design") // Array of team
+
+    var selectedManagerName = ""
+    var selectedPriority = ""
+    var selectedTeam =""
 
 
     // Base URL of your API
-    val BASE_URL = "http://192.168.1.51:4000/"
+    private val BASE_URL = "http://192.168.1.20:4000/"
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,9 +87,23 @@ class Home : AppCompatActivity() {
             btnCreateNew.visibility = View.GONE
         }
 
+        //create new project
         newSubmit.setOnClickListener {
+            val projectName = mainContent.findViewById<EditText>(R.id.etProjectName).text.trim().toString()
+            val des = mainContent.findViewById<EditText>(R.id.etProjectDescription).text.trim().toString()
+            val startDate = mainContent.findViewById<EditText>(R.id.etProjectStartDate).text.trim().toString()
+            val submissionDate = mainContent.findViewById<EditText>(R.id.etSubmissionDate).text.trim().toString()
+
+
+
+            Log.d("selected", "$selectedTeam, $selectedManagerName, $selectedPriority")
+            Log.d("selected", "$projectName, $des, $startDate, $submissionDate")
+
             createProjectFormLayout.visibility = View.GONE
             btnCreateNew.visibility = View.VISIBLE
+
+//            invoke to send the project of employee cem
+            sendCreateNewProject(projectName, des, startDate, submissionDate)
         }
 
 
@@ -128,6 +148,38 @@ class Home : AppCompatActivity() {
         getProjects()
 
         setSpinner()
+    }
+
+//    hnadle for create new project
+    private fun sendCreateNewProject(projectName: String, des: String, startDate: String, submissionDate: String) {
+            val retrofit =  Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val apiServices = retrofit.create(Apis::class.java)
+
+            lifecycleScope.launch {
+                try {
+                    val response = apiServices.newProject(ProjectRequest(projectName, des, startDate, submissionDate, selectedManagerName.lowercase(), selectedPriority.lowercase(), selectedTeam.lowercase()))
+                    if (response.isSuccessful) {
+                        val success = response.body()
+                        if (success != null) {
+                            // Handle successful login response
+                            Log.d("post new project", "success")
+                        } else {
+                            // Handle scenario where response body is null
+                            Log.d("error new project ", "Empty response body")
+                        }
+                    } else {
+                        // Handle unsuccessful login (e.g., invalid credentials, server errors)
+                        val errorBody = response.errorBody()?.string()
+                        Log.d("error new project ", "Error: $errorBody")
+                    }
+                }catch (e: Exception){
+                    Log.d(e.message, e.message.toString())
+                }
+            }
     }
 
     private fun updateNavigationUserDetails(storedLoginResponse: LoginResponse?) {
@@ -220,7 +272,8 @@ class Home : AppCompatActivity() {
                     val employeeResponse = response.body()
                     if (employeeResponse != null) {
                         // Handle successful login response
-                        for (i in employeeResponse.employee) {
+                        Log.d("msg","$employeeResponse")
+                        for (i in employeeResponse.data) {
                             employeeDetails.add(i)
                             if(i.designationType == "manager"){
                                 managers.add(i)
@@ -235,16 +288,26 @@ class Home : AppCompatActivity() {
 
 
 
-// Create an ArrayAdapter using the managerNames array and a default spinner layout
+                        // Create an ArrayAdapter using the managerNames array and a default spinner layout
                         val adapter = ArrayAdapter(this@Home, android.R.layout.simple_spinner_item, managerNames)
 
-// Specify the layout to use when the list of choices appears
+                        // Specify the layout to use when the list of choices appears
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-// Apply the adapter to the spinner
+                        // Apply the adapter to the spinner
                         selectedManager.adapter = adapter
 
+                        selectedManager.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                                val managerName = managerNames[position] // Get the selected priority
+                                // Handle the selected priority as needed
+                                selectedManagerName = managerName
+                            }
 
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                // Handle case when nothing is selected (if needed)
+                            }
+                        }
 
 
                     } else {
@@ -367,22 +430,38 @@ class Home : AppCompatActivity() {
     private fun setSpinner() {
         val mainContent: View = findViewById(R.id.main_content)
         val spinnerPriority =  mainContent.findViewById<Spinner>(R.id.spinnerPriority)
+        val spinnerTeam = mainContent.findViewById<Spinner>(R.id.spinnerTeam)
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, priorities)
+        val teamAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, teams)
 
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        teamAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         // Apply the adapter to the spinner
         spinnerPriority.adapter = adapter
+        spinnerTeam.adapter = teamAdapter
 
 
         spinnerPriority.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedPriority = priorities[position] // Get the selected priority
+                val priority = priorities[position] // Get the selected priority
                 // Handle the selected priority as needed
-                Toast.makeText(this@Home, "selected", Toast.LENGTH_LONG).show()
+                selectedPriority = priority
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Handle case when nothing is selected (if needed)
+            }
+        }
+
+        spinnerTeam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val team = teams[position] // Get the selected priority
+                // Handle the selected priority as needed
+                selectedTeam = team
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

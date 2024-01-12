@@ -322,7 +322,7 @@
                     android:layout_height="wrap_content"
                     android:text="Priority"
                     android:textSize="16dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="2dp"
                     android:layout_marginStart="24dp"/>
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilProjectPriority"
@@ -343,7 +343,7 @@
                     android:layout_height="wrap_content"
                     android:text="Select Manager"
                     android:textSize="16dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="2dp"
                     android:layout_marginStart="24dp"/>
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilProjectManager"
@@ -353,6 +353,27 @@
 
                     <Spinner
                         android:id="@+id/spinnerManagerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+<!--                SELECT TEAM -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Select Team"
+                    android:textSize="16dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginStart="24dp"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilProjectTeam"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <Spinner
+                        android:id="@+id/spinnerTeam"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"/>
