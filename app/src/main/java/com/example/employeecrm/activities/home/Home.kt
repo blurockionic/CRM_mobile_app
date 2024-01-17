@@ -13,7 +13,6 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.core.view.GravityCompat
@@ -22,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.employeecrm.APIServices.Apis
 import com.example.employeecrm.R
 import com.example.employeecrm.activities.admin.AdminDashboard
+import com.example.employeecrm.activities.project.Projects
 import com.example.employeecrm.databinding.ActivityHomeBinding
 import com.example.employeecrm.model.Employee
 import com.example.employeecrm.model.LoginManager
@@ -65,7 +65,7 @@ class Home : AppCompatActivity() {
 
 
     // Base URL of your API
-    private val BASE_URL = "http://192.168.1.20:4000/"
+    private val BASE_URL = "http://192.168.1.21:4000/"
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,6 +93,7 @@ class Home : AppCompatActivity() {
             val des = mainContent.findViewById<EditText>(R.id.etProjectDescription).text.trim().toString()
             val startDate = mainContent.findViewById<EditText>(R.id.etProjectStartDate).text.trim().toString()
             val submissionDate = mainContent.findViewById<EditText>(R.id.etSubmissionDate).text.trim().toString()
+            val websiteUrl = mainContent.findViewById<EditText>(R.id.etWebsiteUrl).text.trim().toString()
 
 
 
@@ -103,7 +104,7 @@ class Home : AppCompatActivity() {
             btnCreateNew.visibility = View.VISIBLE
 
 //            invoke to send the project of employee cem
-            sendCreateNewProject(projectName, des, startDate, submissionDate)
+            sendCreateNewProject(projectName, des, startDate, submissionDate, websiteUrl)
         }
 
 
@@ -129,7 +130,9 @@ class Home : AppCompatActivity() {
                     startActivity(Intent(this, AdminDashboard::class.java))
                     // Optionally, add logic here after starting the activity for the selected item
                 }
-                // Add other menu item cases here if needed
+                R.id.project ->{
+                    startActivity(Intent(this, Projects::class.java))
+                }
                 else -> {
                     // Handle other menu item clicks here if needed
                 }
@@ -150,8 +153,14 @@ class Home : AppCompatActivity() {
         setSpinner()
     }
 
-//    hnadle for create new project
-    private fun sendCreateNewProject(projectName: String, des: String, startDate: String, submissionDate: String) {
+//    handle for create new project
+    private fun sendCreateNewProject(
+    projectName: String,
+    des: String,
+    startDate: String,
+    submissionDate: String,
+    websiteUrl: String
+) {
             val retrofit =  Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -159,14 +168,15 @@ class Home : AppCompatActivity() {
 
             val apiServices = retrofit.create(Apis::class.java)
 
+
             lifecycleScope.launch {
                 try {
-                    val response = apiServices.newProject(ProjectRequest(projectName, des, startDate, submissionDate, selectedManagerName.lowercase(), selectedPriority.lowercase(), selectedTeam.lowercase()))
+                    val response = apiServices.newProject( ProjectRequest(projectName, des, startDate, submissionDate, selectedManagerName.lowercase(), selectedPriority.lowercase(), selectedTeam.lowercase(), websiteUrl, false, false), "token=$token")
                     if (response.isSuccessful) {
                         val success = response.body()
                         if (success != null) {
                             // Handle successful login response
-                            Log.d("post new project", "success")
+                            startActivity(Intent(this@Home, Projects::class.java))
                         } else {
                             //Handle scenario where response body is null
                             Log.d("error new project ", "Empty response body")
@@ -273,7 +283,7 @@ class Home : AppCompatActivity() {
                     if (employeeResponse != null) {
                         // Handle successful login response
                         Log.d("msg","$employeeResponse")
-                        for (i in employeeResponse.data) {
+                        for (i in employeeResponse.employee) {
                             employeeDetails.add(i)
                             if(i.designationType == "manager"){
                                 managers.add(i)
@@ -284,7 +294,7 @@ class Home : AppCompatActivity() {
                         tvEmployee.text = employeeDetails.size.toString()
 
                         // Extract manager names from the list of employees
-                        val managerNames = managers.filter { it.designation == "manager" }.map { it.employeeName }.toTypedArray()
+                        val managerNames = managers.filter { it.designationType == "manager" }.map { it.employeeName }.toTypedArray()
 
 
 
@@ -301,7 +311,11 @@ class Home : AppCompatActivity() {
                             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                                 val managerName = managerNames[position] // Get the selected priority
                                 // Handle the selected priority as needed
-                                selectedManagerName = managerName
+                                val managerId =
+                                    employeeDetails.filter { it.employeeName == managerName }
+                                        .joinToString { it._id }
+                                Log.d("msg", managerId)
+                                selectedManagerName = managerId
                             }
 
                             override fun onNothingSelected(parent: AdapterView<*>?) {
