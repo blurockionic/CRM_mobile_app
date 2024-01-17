@@ -168,7 +168,7 @@ class Home : AppCompatActivity() {
                             // Handle successful login response
                             Log.d("post new project", "success")
                         } else {
-                            // Handle scenario where response body is null
+                            //Handle scenario where response body is null
                             Log.d("error new project ", "Empty response body")
                         }
                     } else {
