@@ -42,8 +42,6 @@ class Projects : AppCompatActivity() {
         }
 
 
-//        handle for get the project details
-        getProjects()
 
 
 
