@@ -40,17 +40,8 @@ class Projects : AppCompatActivity() {
             token = storedLoginResponse.token
             Log.d("response result", token)
         }
-
-
-
-
-
 //        handle for get the project details
         getProjects()
-
-
-
-
     }
 
     private fun showProjectList(allProject: MutableList<Project>) {
