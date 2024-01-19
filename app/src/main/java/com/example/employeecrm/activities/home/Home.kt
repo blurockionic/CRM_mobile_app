@@ -131,9 +131,11 @@ class Home : AppCompatActivity() {
                 R.id.project ->{
                     startActivity(Intent(this, Projects::class.java))
                 }
+
                 R.id.employee ->{
                     startActivity(Intent(this, EmployeeList::class.java))
                 }
+
                 else -> {
                     // Handle other menu item clicks here if needed
                 }

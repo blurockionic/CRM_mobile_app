@@ -18,6 +18,7 @@
         android:theme="@style/Theme.EmployeeCRM"
         tools:targetApi="31">
         <activity
+
             android:name=".activities.admin.employee.AddNewEmployee"
             android:exported="false" />
         <activity

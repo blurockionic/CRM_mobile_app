@@ -1,10 +1,12 @@
 package com.example.employeecrm.activities.project
 
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.employeecrm.APIServices.Apis
@@ -39,8 +41,17 @@ class Projects : AppCompatActivity() {
             Log.d("response result", token)
         }
 
+
 //        handle for get the project details
         getProjects()
+
+
+
+//        handle for get the project details
+        getProjects()
+
+
+
 
     }
 
@@ -51,6 +62,7 @@ class Projects : AppCompatActivity() {
         val adapter = AllProjectAdapter(this@Projects, allProject)
         binding.rvProjectList.adapter = adapter
 
+
         adapter.setOnClickListener(object :
         AllProjectAdapter.OnClickListener{
             override fun onCLick(position: Int, model: Project) {
@@ -58,6 +70,7 @@ class Projects : AppCompatActivity() {
                 startActivity(Intent(this@Projects, ProjectDetails::class.java).putExtra("projectName", model.projectName).putExtra("projectDescription", model.description))
             }
         })
+
     }
 
     private fun getProjects() {

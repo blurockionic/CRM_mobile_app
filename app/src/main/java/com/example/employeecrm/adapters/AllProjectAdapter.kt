@@ -14,7 +14,9 @@ open class AllProjectAdapter (
     private val context: Context,
     private val list: MutableList<Project>
 ):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+
     private var onItemClick: OnClickListener? = null
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -34,9 +36,11 @@ open class AllProjectAdapter (
             holder.itemView.findViewById<TextView>(R.id.tv_projectName).text = model.projectName
             holder.itemView.findViewById<TextView>(R.id.tv_created_at).text = model.projectStartDate
 
+
             holder.itemView.setOnClickListener {
                 onItemClick?.onCLick(position, model)
             }
+
         }
     }
 
@@ -44,9 +48,11 @@ open class AllProjectAdapter (
         return list.size
     }
 
+
     fun setOnClickListener(onClickListener: OnClickListener){
         onItemClick = onClickListener
     }
+
 
     interface OnClickListener{
         fun onCLick(position: Int, model: Project)
