@@ -5,6 +5,7 @@ import com.example.employeecrm.model.EmployeeDetails
 import com.example.employeecrm.model.LoginRequest
 import com.example.employeecrm.model.LoginResponse
 import com.example.employeecrm.model.MyProfile
+import com.example.employeecrm.model.NewEmployee
 import com.example.employeecrm.model.ProjectDetailsRes
 import com.example.employeecrm.model.ProjectRequest
 import com.example.employeecrm.model.Success
@@ -36,6 +37,13 @@ interface Apis {
         @Body project: ProjectRequest,
         @Header("Cookie") token: String
     ): Response<Success>
+
+    //add new employee
+    @POST("api/v1/employee/new")
+    suspend fun addNewEmployee(
+        @Body addNewEmployee: NewEmployee,
+        @Header("Cookie") token: String
+    ):Response<Success>
 
 }
 

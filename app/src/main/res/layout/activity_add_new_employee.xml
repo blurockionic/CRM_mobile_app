@@ -9,7 +9,6 @@
     <!-- res/layout/employee_form.xml -->
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -34,7 +33,7 @@
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextEmployeeName"
+                android:id="@+id/et_employee_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter employee name"
@@ -62,6 +61,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Female"/>
+            <RadioButton
+                android:id="@+id/radioButtonTransgender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Transgender"/>
         </RadioGroup>
         <!-- Phone Number -->
         <!-- Employee Name -->
@@ -90,7 +94,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter Date of Birth"
-                android:inputType="text"/>
+                android:inputType="date"
+                android:onClick="showStartDatePickerDialog"
+                />
         </com.google.android.material.textfield.TextInputLayout>
         <!-- Add similar layout for date of birth -->
 
@@ -151,7 +157,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:text="@{formData.designation}"
                 android:hint="Department"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:required="true"/>
@@ -167,7 +172,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:text="@{formData.designation}"
                 android:hint="Designation"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:required="true"/>
@@ -184,7 +188,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:text="@{formData.designation}"
                 android:hint="Designation Type"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:required="true"/>
@@ -210,7 +213,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:text="@{formData.designation}"
                 android:hint="Village"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:required="true"/>
@@ -226,7 +228,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:text="@{formData.designation}"
                 android:hint="City"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:required="true"/>
@@ -242,7 +243,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:text="@{formData.designation}"
                 android:hint="Address"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:required="true"/>
@@ -258,8 +258,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:text="@{formData.designation}"
                 android:hint="PIN code"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:required="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_police_station"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="Police Station"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:required="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="State"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:required="true"/>
         </com.google.android.material.textfield.TextInputLayout>

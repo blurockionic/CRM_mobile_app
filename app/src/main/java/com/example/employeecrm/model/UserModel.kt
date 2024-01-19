@@ -78,4 +78,24 @@ data class ProjectRequest(
     val isScrap: Boolean,
 )
 
+data class NewEmployee(
+    val employeeName: String,
+    val gender: String,
+    val employeeEmail: String,
+    val password: String,
+    val employeePhoneNumber: String,
+    val dateOfBirth: String,
+    val address: String,
+    val postOffice: String,
+    val policeStation: String,
+    val city: String,
+    val state: String,
+    val pinNumber: String,
+    val designation: String,
+    val designationType: String,
+    val department: String
+)
+
+
+
 

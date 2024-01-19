@@ -30,17 +30,20 @@ class EmployeeList : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_employee)
 
-        initializeUI()
-        getEmployee()
-    }
 
-    private fun initializeUI() {
         val storedLoginResponse = LoginManager.loginResponse
 
         if (storedLoginResponse != null) {
             token = storedLoginResponse.token
             Log.d("response result", token)
         }
+
+        initializeUI()
+        getEmployee()
+    }
+
+    private fun initializeUI() {
+
 
         findViewById<Button>(R.id.btn_add_new_employee).setOnClickListener {
             Toast.makeText(this, "add", Toast.LENGTH_LONG).show()
