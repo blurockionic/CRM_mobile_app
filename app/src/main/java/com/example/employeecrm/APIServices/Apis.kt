@@ -17,22 +17,25 @@ import retrofit2.http.POST
 
 interface Apis {
     @POST("login")
-     suspend fun auth(@Body loginRequest: LoginRequest): Response<LoginResponse>
+    suspend fun auth(@Body loginRequest: LoginRequest): Response<LoginResponse>
 
-     //my profile
+    //my profile
     @GET("api/v1/users/me")
     suspend fun myProfile(@Header("Cookie") token: String): Response<MyProfile>
 
-//    api for get employee details
+    //    api for get employee details
     @GET("api/v1/employee/all")
-    suspend fun getEmployeeDetails(@Header("Cookie") token: String) :Response<EmployeeDetails>
+    suspend fun getEmployeeDetails(@Header("Cookie") token: String): Response<EmployeeDetails>
 
     @GET("api/v1/project/all")
-    suspend fun getProjectDetails(@Header("Cookie") token: String) : Response<ProjectDetailsRes>
+    suspend fun getProjectDetails(@Header("Cookie") token: String): Response<ProjectDetailsRes>
 
     //new project
-    @POST("project")
-    suspend fun newProject(@Body project: ProjectRequest) : Response<Success>
-}
+    @POST("api/v1/project/new")
+    suspend fun newProject(
+        @Body project: ProjectRequest,
+        @Header("Cookie") token: String
+    ): Response<Success>
 
+}
 

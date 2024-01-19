@@ -18,6 +18,18 @@
         android:theme="@style/Theme.EmployeeCRM"
         tools:targetApi="31">
         <activity
+            android:name=".activities.admin.employee.AddNewEmployee"
+            android:exported="false" />
+        <activity
+            android:name=".activities.admin.employee.EmployeeList"
+            android:exported="false" />
+        <activity
+            android:name=".activities.project.ProjectDetails"
+            android:exported="false" />
+        <activity
+            android:name=".activities.project.Projects"
+            android:exported="false" />
+        <activity
             android:name=".activities.admin.AdminDashboard"
             android:exported="false" />
         <activity
