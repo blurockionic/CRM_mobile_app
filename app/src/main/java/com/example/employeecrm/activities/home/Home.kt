@@ -22,6 +22,7 @@ import com.example.employeecrm.APIServices.Apis
 import com.example.employeecrm.R
 import com.example.employeecrm.activities.admin.AdminDashboard
 import com.example.employeecrm.activities.admin.employee.EmployeeList
+import com.example.employeecrm.activities.admin.team.TeamActivity
 import com.example.employeecrm.activities.project.Projects
 import com.example.employeecrm.databinding.ActivityHomeBinding
 import com.example.employeecrm.model.Employee
@@ -134,6 +135,10 @@ class Home : AppCompatActivity() {
 
                 R.id.employee ->{
                     startActivity(Intent(this, EmployeeList::class.java))
+                }
+
+                R.id.team ->{
+                    startActivity(Intent(this, TeamActivity::class.java))
                 }
 
                 else -> {
