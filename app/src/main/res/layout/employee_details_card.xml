@@ -21,13 +21,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/tv_projectName"
+                android:id="@+id/tv_employeeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Employee Name" />
 
             <TextView
-                android:id="@+id/tv_created_at"
+                android:id="@+id/tv_designation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Designation" />

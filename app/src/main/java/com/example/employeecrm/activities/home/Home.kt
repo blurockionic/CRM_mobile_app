@@ -66,7 +66,7 @@ class Home : AppCompatActivity() {
 
 
     // Base URL of your API
-    private val BASE_URL = "http://192.168.26.40:4000/"
+    private val BASE_URL = "http://192.168.1.21:4000/"
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {

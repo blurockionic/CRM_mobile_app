@@ -25,7 +25,7 @@ class Projects : AppCompatActivity() {
     private val allProject: MutableList<Project> = mutableListOf()
 
     // Base URL of your API
-    private val BASE_URL = "http://192.168.26.40:4000/"
+    private val BASE_URL = "http://192.168.1.21:4000/"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProjectsBinding.inflate(layoutInflater)
@@ -39,11 +39,8 @@ class Projects : AppCompatActivity() {
             Log.d("response result", token)
         }
 
-
 //        handle for get the project details
         getProjects()
-
-
 
     }
 

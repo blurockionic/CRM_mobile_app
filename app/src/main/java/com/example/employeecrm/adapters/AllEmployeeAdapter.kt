@@ -1,6 +1,7 @@
 package com.example.employeecrm.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import com.example.employeecrm.model.Employee
 
 class AllEmployeeAdapter(
     private val context: Context,
-    private val list: MutableList<Employee>
+    private val list: List<Employee>
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var onItemClick: OnClickListener? = null
 
@@ -30,8 +31,9 @@ class AllEmployeeAdapter(
         val model = list[position]
 
         if (holder is MyViewHolder){
-            holder.itemView.findViewById<TextView>(R.id.tv_projectName).text = model.employeeName
-            holder.itemView.findViewById<TextView>(R.id.tv_created_at).text = model.designation
+            Log.d("employee", "hello ji")
+            holder.itemView.findViewById<TextView>(R.id.tv_employeeName).text = "emp: ${model.employeeName}"
+            holder.itemView.findViewById<TextView>(R.id.tv_designation).text = model.designation
 
             holder.itemView.setOnClickListener {
                 onItemClick?.onCLick(position, model)
