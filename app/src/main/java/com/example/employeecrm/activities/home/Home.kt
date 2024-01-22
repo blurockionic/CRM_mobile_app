@@ -43,27 +43,34 @@ import java.util.Date
 import java.util.Locale
 
 class Home : AppCompatActivity() {
-//    for bind the data
+    //    for bind the data
     private lateinit var binding: ActivityHomeBinding
+
     //for storing the token
     private lateinit var token: String
-//    for employee details
+
+    //    for employee details
     private val employeeDetails: MutableList<Employee> = mutableListOf()
+
     // for all project
     private val allProject: MutableList<Project> = mutableListOf()
+
     //for completed project
-    private val completedProject : MutableList<Project> = mutableListOf()
+    private val completedProject: MutableList<Project> = mutableListOf()
+
     //for ongoing project
-    private val ongoingProject : MutableList<Project> = mutableListOf()
+    private val ongoingProject: MutableList<Project> = mutableListOf()
+
     // for select manager
-    private val managers : MutableList<Employee> = mutableListOf()
+    private val managers: MutableList<Employee> = mutableListOf()
+
     //priority
     val priorities = arrayOf("Low", "Medium", "High") // Array of priorities
     val teams = arrayOf("App Development", "Web Development", "Design") // Array of team
 
     var selectedManagerName = ""
     var selectedPriority = ""
-    var selectedTeam =""
+    var selectedTeam = ""
 
 
     // Base URL of your API
@@ -82,7 +89,7 @@ class Home : AppCompatActivity() {
         val mainContent = findViewById<View>(R.id.main_content)
         val btnCreateNew = mainContent.findViewById<FloatingActionButton>(R.id.btn_create_project)
         val createProjectFormLayout = mainContent.findViewById<LinearLayout>(R.id.ll_create_project)
-        val newSubmit =  mainContent.findViewById<Button>(R.id.btn_new_project_submit)
+        val newSubmit = mainContent.findViewById<Button>(R.id.btn_new_project_submit)
 
         btnCreateNew.setOnClickListener {
             createProjectFormLayout.visibility = View.VISIBLE
@@ -91,11 +98,16 @@ class Home : AppCompatActivity() {
 
         //create new project
         newSubmit.setOnClickListener {
-            val projectName = mainContent.findViewById<EditText>(R.id.etProjectName).text.trim().toString()
-            val des = mainContent.findViewById<EditText>(R.id.etProjectDescription).text.trim().toString()
-            val startDate = mainContent.findViewById<EditText>(R.id.etProjectStartDate).text.trim().toString()
-            val submissionDate = mainContent.findViewById<EditText>(R.id.etSubmissionDate).text.trim().toString()
-            val websiteUrl = mainContent.findViewById<EditText>(R.id.etWebsiteUrl).text.trim().toString()
+            val projectName =
+                mainContent.findViewById<EditText>(R.id.etProjectName).text.trim().toString()
+            val des =
+                mainContent.findViewById<EditText>(R.id.etProjectDescription).text.trim().toString()
+            val startDate =
+                mainContent.findViewById<EditText>(R.id.etProjectStartDate).text.trim().toString()
+            val submissionDate =
+                mainContent.findViewById<EditText>(R.id.etSubmissionDate).text.trim().toString()
+            val websiteUrl =
+                mainContent.findViewById<EditText>(R.id.etWebsiteUrl).text.trim().toString()
 
 
 
@@ -127,20 +139,19 @@ class Home : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.admin_dashboard -> {
                     startActivity(Intent(this, AdminDashboard::class.java))
-                    // Optionally, add logic here after starting the activity for the selected item
                 }
-                R.id.project ->{
+
+                R.id.project -> {
                     startActivity(Intent(this, Projects::class.java))
                 }
 
-                R.id.employee ->{
+                R.id.employee -> {
                     startActivity(Intent(this, EmployeeList::class.java))
                 }
 
-                R.id.team ->{
+                R.id.team -> {
                     startActivity(Intent(this, TeamActivity::class.java))
                 }
-
                 else -> {
                     // Handle other menu item clicks here if needed
                 }
@@ -158,46 +169,60 @@ class Home : AppCompatActivity() {
 //        invoke project
         getProjects()
 
+
         setSpinner()
     }
 
-//    handle for create new project
+    //    handle for create new project
     private fun sendCreateNewProject(
-    projectName: String,
-    des: String,
-    startDate: String,
-    submissionDate: String,
-    websiteUrl: String
-) {
-            val retrofit =  Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+        projectName: String,
+        des: String,
+        startDate: String,
+        submissionDate: String,
+        websiteUrl: String
+    ) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
-            val apiServices = retrofit.create(Apis::class.java)
+        val apiServices = retrofit.create(Apis::class.java)
 
 
-            lifecycleScope.launch {
-                try {
-                    val response = apiServices.newProject( ProjectRequest(projectName, des, startDate, submissionDate, selectedManagerName.lowercase(), selectedPriority.lowercase(), selectedTeam.lowercase(), websiteUrl, false, false), "token=$token")
-                    if (response.isSuccessful) {
-                        val success = response.body()
-                        if (success != null) {
-                            // Handle successful login response
-                            startActivity(Intent(this@Home, Projects::class.java))
-                        } else {
-                            //Handle scenario where response body is null
-                            Log.d("error new project ", "Empty response body")
-                        }
+        lifecycleScope.launch {
+            try {
+                val response = apiServices.newProject(
+                    ProjectRequest(
+                        projectName,
+                        des,
+                        startDate,
+                        submissionDate,
+                        selectedManagerName.lowercase(),
+                        selectedPriority.lowercase(),
+                        selectedTeam.lowercase(),
+                        websiteUrl,
+                        false,
+                        false
+                    ), "token=$token"
+                )
+                if (response.isSuccessful) {
+                    val success = response.body()
+                    if (success != null) {
+                        // Handle successful login response
+                        startActivity(Intent(this@Home, Projects::class.java))
                     } else {
-                        // Handle unsuccessful login (e.g., invalid credentials, server errors)
-                        val errorBody = response.errorBody()?.string()
-                        Log.d("error new project ", "Error: $errorBody")
+                        //Handle scenario where response body is null
+                        Log.d("error new project ", "Empty response body")
                     }
-                }catch (e: Exception){
-                    Log.d(e.message, e.message.toString())
+                } else {
+                    // Handle unsuccessful login (e.g., invalid credentials, server errors)
+                    val errorBody = response.errorBody()?.string()
+                    Log.d("error new project ", "Error: $errorBody")
                 }
+            } catch (e: Exception) {
+                Log.d(e.message, e.message.toString())
             }
+        }
     }
 
     private fun updateNavigationUserDetails(storedLoginResponse: LoginResponse?) {
@@ -290,10 +315,10 @@ class Home : AppCompatActivity() {
                     val employeeResponse = response.body()
                     if (employeeResponse != null) {
                         // Handle successful login response
-                        Log.d("msg","$employeeResponse")
+                        Log.d("msg", "$employeeResponse")
                         for (i in employeeResponse.data) {
                             employeeDetails.add(i)
-                            if(i.designationType == "manager"){
+                            if (i.designationType == "manager") {
                                 managers.add(i)
                             }
                         }
@@ -302,12 +327,16 @@ class Home : AppCompatActivity() {
                         tvEmployee.text = employeeDetails.size.toString()
 
                         // Extract manager names from the list of employees
-                        val managerNames = managers.filter { it.designationType == "manager" }.map { it.employeeName }.toTypedArray()
-
+                        val managerNames = managers.filter { it.designationType == "manager" }
+                            .map { it.employeeName }.toTypedArray()
 
 
                         // Create an ArrayAdapter using the managerNames array and a default spinner layout
-                        val adapter = ArrayAdapter(this@Home, android.R.layout.simple_spinner_item, managerNames)
+                        val adapter = ArrayAdapter(
+                            this@Home,
+                            android.R.layout.simple_spinner_item,
+                            managerNames
+                        )
 
                         // Specify the layout to use when the list of choices appears
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -315,21 +344,28 @@ class Home : AppCompatActivity() {
                         // Apply the adapter to the spinner
                         selectedManager.adapter = adapter
 
-                        selectedManager.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                                val managerName = managerNames[position] // Get the selected priority
-                                // Handle the selected priority as needed
-                                val managerId =
-                                    employeeDetails.filter { it.employeeName == managerName }
-                                        .joinToString { it._id }
-                                Log.d("msg", managerId)
-                                selectedManagerName = managerId
-                            }
+                        selectedManager.onItemSelectedListener =
+                            object : AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(
+                                    parent: AdapterView<*>?,
+                                    view: View?,
+                                    position: Int,
+                                    id: Long
+                                ) {
+                                    val managerName =
+                                        managerNames[position] // Get the selected priority
+                                    // Handle the selected priority as needed
+                                    val managerId =
+                                        employeeDetails.filter { it.employeeName == managerName }
+                                            .joinToString { it._id }
+                                    Log.d("msg", managerId)
+                                    selectedManagerName = managerId
+                                }
 
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-                                // Handle case when nothing is selected (if needed)
+                                override fun onNothingSelected(parent: AdapterView<*>?) {
+                                    // Handle case when nothing is selected (if needed)
+                                }
                             }
-                        }
 
 
                     } else {
@@ -348,13 +384,10 @@ class Home : AppCompatActivity() {
         }
 
 
-
-
-
     }
 
 
-//    handle for get project
+    //    handle for get project
     private fun getProjects() {
         //count the employee
         val mainContent: View = findViewById(R.id.main_content)
@@ -376,26 +409,26 @@ class Home : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val projectResponse = response.body()
                     if (projectResponse != null) {
-                        for(project in projectResponse.allProject){
+                        for (project in projectResponse.allProject) {
 //                            push all the project
                             allProject.add(project)
 //                            for completed and in comleted project
-                            if (project.isCompleted){
+                            if (project.isCompleted) {
                                 completedProject.add(project)
-                            }else{
+                            } else {
                                 ongoingProject.add(project)
                             }
                         }
                         Log.d("project details", "$allProject")
 
 //                        count all the project
-                        tvProject.text =  "${allProject.size}"
+                        tvProject.text = "${allProject.size}"
 
 //                        count all completed project
                         tvCompleted.text = "${completedProject.size}"
 
 //                        count all ongoing project
-                          tvOngoing.text = "${ongoingProject.size}"
+                        tvOngoing.text = "${ongoingProject.size}"
 
                     } else {
                         // Handle scenario where response body is null
@@ -451,7 +484,7 @@ class Home : AppCompatActivity() {
     // handle for spinner
     private fun setSpinner() {
         val mainContent: View = findViewById(R.id.main_content)
-        val spinnerPriority =  mainContent.findViewById<Spinner>(R.id.spinnerPriority)
+        val spinnerPriority = mainContent.findViewById<Spinner>(R.id.spinnerPriority)
         val spinnerTeam = mainContent.findViewById<Spinner>(R.id.spinnerTeam)
 
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -468,7 +501,12 @@ class Home : AppCompatActivity() {
 
 
         spinnerPriority.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val priority = priorities[position] // Get the selected priority
                 // Handle the selected priority as needed
                 selectedPriority = priority
@@ -480,7 +518,12 @@ class Home : AppCompatActivity() {
         }
 
         spinnerTeam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val team = teams[position] // Get the selected priority
                 // Handle the selected priority as needed
                 selectedTeam = team
