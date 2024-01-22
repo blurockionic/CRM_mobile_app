@@ -79,7 +79,7 @@ class EmployeeList : AppCompatActivity() {
 
     private fun handleSuccessfulResponse(employeeResponse: EmployeeDetails?) {
         if (employeeResponse != null) {
-            val transformedEmployeeDetails = employeeResponse.employee.map { it.copy() }
+            val transformedEmployeeDetails = employeeResponse.data.map { it.copy() }
             logDetailsAndInvokeShowList(transformedEmployeeDetails)
         } else {
             Log.d("employee error", "Empty response body")

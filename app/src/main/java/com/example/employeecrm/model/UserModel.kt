@@ -5,7 +5,7 @@ package com.example.employeecrm.model
 data class LoginRequest(val email: String, val password: String)
 
 data class LoginResponse(val success:Boolean, val message: String, val token: String, val user: User)
-data class EmployeeDetails(val success:Boolean, val message: String, val employee: Array<Employee>)
+data class EmployeeDetails(val success:Boolean, val message: String, val data: Array<Employee>)
 data class MyProfile(val success:Boolean, val message: String,  val user: User)
 
 data class ProjectDetailsRes(val success: Boolean, val message: String, val allProject: MutableList<Project>)

@@ -291,7 +291,7 @@ class Home : AppCompatActivity() {
                     if (employeeResponse != null) {
                         // Handle successful login response
                         Log.d("msg","$employeeResponse")
-                        for (i in employeeResponse.employee) {
+                        for (i in employeeResponse.data) {
                             employeeDetails.add(i)
                             if(i.designationType == "manager"){
                                 managers.add(i)
