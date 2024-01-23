@@ -84,15 +84,23 @@
                 tools:ignore="TouchTargetSizeCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_add_member"
-            android:drawableLeft="@drawable/add"
-        android:paddingStart="8dp"
-        android:text="Add Member"
-        android:textAlignment="textStart"
+            android:paddingStart="8dp"
+            android:text="Add Member"
         />
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="#656464"
+            android:id="@+id/rv_selected_members"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rv_employee_list"/>
 
     </LinearLayout>
 
