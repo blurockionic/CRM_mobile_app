@@ -18,6 +18,9 @@
         android:theme="@style/Theme.EmployeeCRM"
         tools:targetApi="31">
         <activity
+            android:name=".activities.admin.team.TeamList"
+            android:exported="false" />
+        <activity
             android:name=".activities.admin.team.TeamActivity"
             android:exported="false" />
         <activity

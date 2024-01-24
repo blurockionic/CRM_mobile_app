@@ -1,8 +1,12 @@
 package com.example.employeecrm.activities.admin.team
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +18,8 @@ import com.example.employeecrm.adapters.TeamMembersAdapter
 import com.example.employeecrm.databinding.ActivityTeamBinding
 import com.example.employeecrm.model.Employee
 import com.example.employeecrm.model.LoginManager
+import com.example.employeecrm.model.NewTeam
+import com.example.employeecrm.model.Project
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -27,10 +33,22 @@ class TeamActivity : AppCompatActivity() {
     //employee copy details
     private var employeeDetailsDup: MutableList<Employee> = mutableListOf()
 
+    private var selectedEmp :  MutableList<Employee> = mutableListOf()
+
+    //managerList
+    private var managerList : MutableList<Employee> = mutableListOf()
+
+    // for all project
+    private val allProject: MutableList<Project> = mutableListOf()
+
     val list = mutableListOf<Employee>()
 
     //for storing the token
     private lateinit var token: String
+
+    private lateinit var managerId : String
+    private lateinit var projectId : String
+    private lateinit var adminId: String
 
     //base url
     private  var BASE_URL = "http://192.168.1.21:4000/"
@@ -45,21 +63,170 @@ class TeamActivity : AppCompatActivity() {
 
         if (storedLoginResponse != null) {
             token = storedLoginResponse.token
-            Log.d("response result", token)
+            adminId = storedLoginResponse.user._id
+            Log.d("response result", adminId)
+        }
+
+
+        binding.btnShowAllTeam.setOnClickListener {
+            startActivity(Intent(this@TeamActivity, TeamList::class.java))
         }
 
 
 
-        binding.btnAddMember.setOnClickListener {
-            Toast.makeText(this@TeamActivity, "Working on this module", Toast.LENGTH_SHORT).show()
-        }
+
 
 //        get employee
         getEmployee()
 
+        //invoke
+        getProjects()
+
+        createTeam(adminId)
     }
 
+    private fun createTeam(adminId: String) {
+        binding.btnSubmit.setOnClickListener {
+            Toast.makeText(this@TeamActivity, "Working on this module", Toast.LENGTH_SHORT).show()
+            val teamName = binding.etTeamName.text.toString()
+            val teamDescription =  binding.etTeamDescription.text.toString()
 
+            Log.d("alldata", "$teamName, $teamDescription, $projectId, $managerId, $selectedEmp, $adminId")
+
+            handleOnCreateTeam(teamName, teamDescription, adminId, projectId, managerId, selectedEmp)
+
+        }
+    }
+
+    private fun handleOnCreateTeam(
+        teamName: String,
+        teamDescription: String,
+        adminId: String,
+        projectId: String,
+        managerId: String,
+        selectedEmp: MutableList<Employee>
+    ) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val apiServices = retrofit.create(Apis::class.java)
+
+        lifecycleScope.launch {
+            try {
+                val response = apiServices.createNewTeam(
+                    NewTeam(
+                        "$teamName",
+                        "$teamDescription",
+                        "$adminId",
+                        "$managerId",
+                        "$projectId",
+                        "$selectedEmp"
+                    ),
+                    "token=$token"
+                )
+
+                if (response.isSuccessful){
+                    val success = response.body()
+                    if (success != null){
+                        Log.d("alldata", "team created successfully!")
+                    }else{
+                        //Handle scenario where response body is null
+                        Log.d("alldata error new project ", "Empty response body")
+                    }
+                }else{
+                    val errorBody = response.errorBody()?.string()
+                    Log.d("alldata error new team ", "Error: $errorBody")
+                }
+            }catch (e: Exception){
+                Log.e("alldata", e.message.toString())
+            }
+        }
+    }
+
+    private fun getProjects() {
+
+        //for api call
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val apiServices = retrofit.create(Apis::class.java)
+
+        lifecycleScope.launch {
+            try {
+                val response = apiServices.getProjectDetails("token=$token")
+                if (response.isSuccessful) {
+                    val projectResponse = response.body()
+                    if (projectResponse != null) {
+                        for (project in projectResponse.allProject) {
+//                            push all the project
+                            allProject.add(project)
+
+                        }
+
+
+                        // Extract manager names from the list of employees
+                        val projectName = allProject
+                            .map { it.projectName }.toTypedArray()
+                        // Create an ArrayAdapter using the managerNames array and a default spinner layout
+                        val adapter = ArrayAdapter(
+                            this@TeamActivity,
+                            android.R.layout.simple_spinner_item,
+                            projectName
+                        )
+
+                        // Specify the layout to use when the list of choices appears
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+                        // Apply the adapter to the spinner
+                        binding.spinnerProjectNName.adapter = adapter
+
+                        binding.spinnerProjectNName.onItemSelectedListener =
+                            object : AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(
+                                    parent: AdapterView<*>?,
+                                    view: View?,
+                                    position: Int,
+                                    id: Long
+                                ) {
+                                    val projName =
+                                        projectName[position] // Get the selected priority
+                                    // Handle the selected priority as needed
+                                    val projectID =
+                                        allProject.filter { it.projectName == projName }
+                                            .joinToString { it._id }
+                                    Log.d("idies", projectID)
+                                        projectId =  projectID
+                                }
+
+                                override fun onNothingSelected(parent: AdapterView<*>?) {
+                                    // Handle case when nothing is selected (if needed)
+                                }
+                            }
+
+
+
+
+
+                    } else {
+                        // Handle scenario where response body is null
+                        Log.d("project error", "Empty response body")
+                    }
+                } else {
+                    // Handle unsuccessful login (e.g., invalid credentials, server errors)
+                    val errorBody = response.errorBody()?.string()
+                    Log.d("project error", "Error: $errorBody")
+                }
+            } catch (e: IOException) {
+                // Handle other exceptions
+                Log.d("project error", "Error: ${e.message}")
+            }
+        }
+
+    }
     //    handle for get the employee details
     private fun getEmployee() {
         val retrofit = Retrofit.Builder()
@@ -75,13 +242,63 @@ class TeamActivity : AppCompatActivity() {
                     val employeeResponse = response.body()
                     if (employeeResponse != null) {
                         // Handle successful login response
-                        Log.d("msg", "$employeeResponse")
+
                         for (i in employeeResponse.data) {
-                            employeeDetails.add(i)
+                            if(i.designationType == "employee"){
+                                employeeDetails.add(i)
+                            }
+                            if(i.designationType == "manager"){
+                                managerList.add(i)
+                            }
                         }
 
-//                        invoke
+
+
+                        //load manager list in spinner
+
+                        // Extract manager names from the list of employees
+                        val managerNames = managerList.filter { it.designationType == "manager" }
+                            .map { it.employeeName }.toTypedArray()
+                        // Create an ArrayAdapter using the managerNames array and a default spinner layout
+                        val adapter = ArrayAdapter(
+                            this@TeamActivity,
+                            android.R.layout.simple_spinner_item,
+                            managerNames
+                        )
+
+                        // Specify the layout to use when the list of choices appears
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+                        // Apply the adapter to the spinner
+                        binding.spinnerManagerName.adapter = adapter
+
+                        binding.spinnerManagerName.onItemSelectedListener =
+                            object : AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(
+                                    parent: AdapterView<*>?,
+                                    view: View?,
+                                    position: Int,
+                                    id: Long
+                                ) {
+                                    val managerName =
+                                        managerNames[position] // Get the selected priority
+                                    // Handle the selected priority as needed
+                                    Log.d("msg", managerName)
+                                    val managerID =
+                                        managerList.filter { it.employeeName == managerName }
+                                            .joinToString { it._id }
+                                     managerId = managerID
+                                    Log.d("msg", managerID)
+                                }
+
+                                override fun onNothingSelected(parent: AdapterView<*>?) {
+                                    // Handle case when nothing is selected (if needed)
+                                }
+                            }
+
+                        //invoke
                         showEmpList(employeeDetails)
+
                     } else {
                         // Handle scenario where response body is null
                         Log.d("employee error", "Empty response body")
@@ -101,30 +318,30 @@ class TeamActivity : AppCompatActivity() {
     }
 
     private fun showEmpList(employeeDetails: List<Employee>) {
-        val mutableList = employeeDetails.toMutableList()
+         employeeDetailsDup = employeeDetails.toMutableList()
         val recyclerView = findViewById<RecyclerView>(R.id.rv_employee_list)
         recyclerView.layoutManager = LinearLayoutManager(this@TeamActivity, LinearLayoutManager.VERTICAL, false)
         recyclerView.setHasFixedSize(true)
 
-        val adapter = TeamMembersAdapter(this@TeamActivity, mutableList)
+        val adapter = TeamMembersAdapter(this@TeamActivity, employeeDetailsDup)
         recyclerView.adapter = adapter
 
         adapter.setOnClickListener(object : TeamMembersAdapter.OnClickListener {
             override fun onCLick(position: Int, model: Employee) {
                 Toast.makeText(this@TeamActivity, "clicked ${model.employeeName}", Toast.LENGTH_LONG).show()
                 list.add(model)
-                selectedMembers(list, mutableList)
+                selectedEmp = list
+                selectedMembers(list, employeeDetailsDup)
                 // Create a mutable copy of the original list to avoid modifying the input parameter
                 // Remove the clicked item from the copy
-                mutableList.removeAt(position)
-
+                employeeDetailsDup.removeAt(position)
                 // Update the adapter with the modified list
                 adapter.notifyDataSetChanged()
             }
         })
     }
 
-    private fun selectedMembers(list: MutableList<Employee>, mutableList: MutableList<Employee>) {
+    private fun selectedMembers(list: MutableList<Employee>, employeeDetailsDup: MutableList<Employee>) {
         binding.rvSelectedMembers.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.rvSelectedMembers.setHasFixedSize(true)
 
@@ -132,11 +349,22 @@ class TeamActivity : AppCompatActivity() {
 
         adapter.setOnClickListener(object :SelectedTeamMembersAdapter.OnClickListener{
             override fun onCLick(position: Int, model: Employee) {
-                list.removeAt(position)
+                // Remove the clicked item from the selectedEmp and list
+                if (position < selectedEmp.size) {
+                    selectedEmp.removeAt(position)
+                }
+                if (position < list.size) {
+                    list.removeAt(position)
+                }
+
                 // Notify the adapter that the data set has changed
-                mutableList.add(model)
-                showEmpList(mutableList)
                 adapter.notifyDataSetChanged()
+
+                // Add the removed item back to employeeDetailsDup
+                if (!employeeDetailsDup.contains(model)) {
+                    employeeDetailsDup.add(model)
+                    showEmpList(employeeDetailsDup)
+                }
             }
         })
 

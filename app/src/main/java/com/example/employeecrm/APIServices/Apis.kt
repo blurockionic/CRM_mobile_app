@@ -1,11 +1,13 @@
 package com.example.employeecrm.APIServices
 
+import com.example.employeecrm.model.AllTeam
 import com.example.employeecrm.model.Employee
 import com.example.employeecrm.model.EmployeeDetails
 import com.example.employeecrm.model.LoginRequest
 import com.example.employeecrm.model.LoginResponse
 import com.example.employeecrm.model.MyProfile
 import com.example.employeecrm.model.NewEmployee
+import com.example.employeecrm.model.NewTeam
 import com.example.employeecrm.model.ProjectDetailsRes
 import com.example.employeecrm.model.ProjectRequest
 import com.example.employeecrm.model.Success
@@ -45,5 +47,16 @@ interface Apis {
         @Header("Cookie") token: String
     ):Response<Success>
 
+
+    //create new team
+    @POST("api/v1/team/CreateNewTeam")
+    suspend fun createNewTeam(
+        @Body newTeam: NewTeam,
+        @Header("Cookie") token: String
+    ): Response<Success>
+
+//    get all the team
+    @GET("api/v1/team/allTeams")
+    suspend fun allTeam(@Header("Cookie") token: String): Response<AllTeam>
 }
 
