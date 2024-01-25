@@ -36,7 +36,7 @@ class AddNewEmployee : AppCompatActivity() {
     private lateinit var token:String
 
     //base url
-    private val BASE_URL = "http://192.168.1.21:4000/"
+    private val BASE_URL = "http://192.168.1.8:4000/"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddNewEmployeeBinding.inflate(layoutInflater)

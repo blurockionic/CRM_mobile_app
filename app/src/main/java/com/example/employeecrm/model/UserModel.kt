@@ -109,6 +109,7 @@ data class NewTeam(
 
 
 data class Team(
+    val _id: String,
     val teamName: String,
     val teamDescription: String?
 )

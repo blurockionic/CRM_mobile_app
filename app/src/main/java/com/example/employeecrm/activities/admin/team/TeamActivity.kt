@@ -33,7 +33,7 @@ class TeamActivity : AppCompatActivity() {
     //employee copy details
     private var employeeDetailsDup: MutableList<Employee> = mutableListOf()
 
-    private var selectedEmp :  MutableList<Employee> = mutableListOf()
+    private var selectedEmp :  MutableList<String> = mutableListOf()
 
     //managerList
     private var managerList : MutableList<Employee> = mutableListOf()
@@ -51,7 +51,7 @@ class TeamActivity : AppCompatActivity() {
     private lateinit var adminId: String
 
     //base url
-    private  var BASE_URL = "http://192.168.1.21:4000/"
+    private  var BASE_URL = "http://192.168.1.8:4000/"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTeamBinding.inflate(layoutInflater)
@@ -67,14 +67,23 @@ class TeamActivity : AppCompatActivity() {
             Log.d("response result", adminId)
         }
 
+        val teamName = intent.getStringExtra("teamName")
+        val teamId = intent.getStringExtra("teamId")
 
-        binding.btnShowAllTeam.setOnClickListener {
-            startActivity(Intent(this@TeamActivity, TeamList::class.java))
+        //set the value
+
+        binding.etTeamName.setText(teamName)
+
+        Log.d("teamId", "$teamId")
+
+        if(teamId != null){
+            binding.btnSubmit.visibility = View.GONE
+            binding.btnUpdateTeamDetails.visibility = View.VISIBLE
+            binding.tvTitle.text = "Update Team $teamName"
+        }else{
+            binding.btnSubmit.visibility = View.VISIBLE
+            binding.btnUpdateTeamDetails.visibility = View.GONE
         }
-
-
-
-
 
 //        get employee
         getEmployee()
@@ -104,7 +113,7 @@ class TeamActivity : AppCompatActivity() {
         adminId: String,
         projectId: String,
         managerId: String,
-        selectedEmp: MutableList<Employee>
+        selectedEmp: MutableList<String>
     ) {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -131,6 +140,7 @@ class TeamActivity : AppCompatActivity() {
                     val success = response.body()
                     if (success != null){
                         Log.d("alldata", "team created successfully!")
+                        startActivity(Intent(this@TeamActivity, TeamList::class.java))
                     }else{
                         //Handle scenario where response body is null
                         Log.d("alldata error new project ", "Empty response body")
@@ -164,9 +174,7 @@ class TeamActivity : AppCompatActivity() {
                         for (project in projectResponse.allProject) {
 //                            push all the project
                             allProject.add(project)
-
                         }
-
 
                         // Extract manager names from the list of employees
                         val projectName = allProject
@@ -330,7 +338,7 @@ class TeamActivity : AppCompatActivity() {
             override fun onCLick(position: Int, model: Employee) {
                 Toast.makeText(this@TeamActivity, "clicked ${model.employeeName}", Toast.LENGTH_LONG).show()
                 list.add(model)
-                selectedEmp = list
+                selectedEmp.add(model._id)
                 selectedMembers(list, employeeDetailsDup)
                 // Create a mutable copy of the original list to avoid modifying the input parameter
                 // Remove the clicked item from the copy

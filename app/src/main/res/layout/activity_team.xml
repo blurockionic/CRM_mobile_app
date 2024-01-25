@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="New Team"
+            android:id="@+id/tv_title"
             android:textSize="18sp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -107,14 +108,13 @@
             android:layout_height="wrap_content"
             android:text="Submit"
             android:id="@+id/btn_submit"/>
-
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="show all team"
-            android:id="@+id/btn_show_all_team"/>
+            android:text="Update"
+            android:id="@+id/btn_update_team_details"/>
 
     </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

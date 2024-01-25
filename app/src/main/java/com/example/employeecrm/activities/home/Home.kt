@@ -23,6 +23,7 @@ import com.example.employeecrm.R
 import com.example.employeecrm.activities.admin.AdminDashboard
 import com.example.employeecrm.activities.admin.employee.EmployeeList
 import com.example.employeecrm.activities.admin.team.TeamActivity
+import com.example.employeecrm.activities.admin.team.TeamList
 import com.example.employeecrm.activities.project.Projects
 import com.example.employeecrm.databinding.ActivityHomeBinding
 import com.example.employeecrm.model.Employee
@@ -74,7 +75,7 @@ class Home : AppCompatActivity() {
 
 
     // Base URL of your API
-    private val BASE_URL = "http://192.168.1.21:4000/"
+    private val BASE_URL = "http://192.168.1.8:4000/"
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -150,7 +151,7 @@ class Home : AppCompatActivity() {
                 }
 
                 R.id.team -> {
-                    startActivity(Intent(this, TeamActivity::class.java))
+                    startActivity(Intent(this, TeamList::class.java))
                 }
                 else -> {
                     // Handle other menu item clicks here if needed

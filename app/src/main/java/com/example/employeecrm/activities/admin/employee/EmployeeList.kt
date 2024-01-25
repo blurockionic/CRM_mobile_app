@@ -24,7 +24,7 @@ class EmployeeList : AppCompatActivity() {
 
     private val employeeDetails: MutableList<Employee> = mutableListOf()
     private lateinit var token: String
-    private val BASE_URL = "http://192.168.1.21:4000/"
+    private val BASE_URL = "http://192.168.1.8:4000/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
