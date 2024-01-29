@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.employeecrm.APIServices.Apis
 import com.example.employeecrm.R
 import com.example.employeecrm.activities.project.Projects
+import com.example.employeecrm.base.BaseActivity
 import com.example.employeecrm.databinding.ActivityAddNewEmployeeBinding
 import com.example.employeecrm.model.LoginManager
 import com.example.employeecrm.model.NewEmployee
@@ -26,7 +27,7 @@ import java.util.Date
 import java.util.Locale
 
 
-class AddNewEmployee : AppCompatActivity() {
+class AddNewEmployee : BaseActivity() {
     private lateinit var binding :ActivityAddNewEmployeeBinding
     //selected gender
     private lateinit var selectedGender: String
@@ -36,7 +37,7 @@ class AddNewEmployee : AppCompatActivity() {
     private lateinit var token:String
 
     //base url
-    private val BASE_URL = "http://192.168.1.8:4000/"
+    private val BASE_URL = "http://192.168.1.5:4000/"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddNewEmployeeBinding.inflate(layoutInflater)
@@ -46,9 +47,7 @@ class AddNewEmployee : AppCompatActivity() {
         // Checking if a login response is stored and accessing its properties
         val storedLoginResponse = LoginManager.loginResponse
 
-        if (storedLoginResponse != null) {
-            token = storedLoginResponse.token
-        }
+        token = storedLoginResponse?.token ?: getAuthToken()
 
         initializeUI()
     }

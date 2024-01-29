@@ -1,5 +1,6 @@
 package com.example.employeecrm.auth
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,7 +23,7 @@ import java.io.IOException
 
 class Login : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private val BASE_URL = "http://192.168.1.8:4000/api/v1/users/" // Remove '/users/login' from the base URL
+    private val BASE_URL = "http://192.168.1.5:4000/api/v1/users/" // Remove '/users/login' from the base URL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +69,8 @@ class Login : AppCompatActivity() {
                         LoginManager.loginResponse = receivedLoginResponse
 
                         if(loginResponse.success){
+                            // Save the token to SharedPreferences or another secure storage
+                            saveAuthToken(loginResponse.token)
                             Toast.makeText(this@Login, "${loginResponse.message}", Toast.LENGTH_LONG).show()
                             startActivity(Intent(this@Login, Home::class.java))
                             finish()
@@ -89,5 +92,12 @@ class Login : AppCompatActivity() {
                 Log.d("LoginError", "Error: ${e.message}")
             }
         }
+    }
+
+    private fun saveAuthToken(token: String) {
+        val sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit();
+        editor.putString("authToken", token)
+        editor.apply()
     }
 }

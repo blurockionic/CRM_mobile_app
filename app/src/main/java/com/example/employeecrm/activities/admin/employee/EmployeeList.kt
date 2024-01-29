@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.employeecrm.APIServices.Apis
 import com.example.employeecrm.R
 import com.example.employeecrm.adapters.AllEmployeeAdapter
+import com.example.employeecrm.base.BaseActivity
 import com.example.employeecrm.model.Employee
 import com.example.employeecrm.model.EmployeeDetails
 import com.example.employeecrm.model.LoginManager
@@ -20,11 +21,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
-class EmployeeList : AppCompatActivity() {
+class EmployeeList : BaseActivity() {
 
     private val employeeDetails: MutableList<Employee> = mutableListOf()
     private lateinit var token: String
-    private val BASE_URL = "http://192.168.1.8:4000/"
+    private val BASE_URL = "http://192.168.1.5:4000/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +36,13 @@ class EmployeeList : AppCompatActivity() {
 
         if (storedLoginResponse != null) {
             token = storedLoginResponse.token
-            Log.d("response result", token)
+        }else{
+            token = getAuthToken()
         }
+
+
+
+
 
         initializeUI()
         getEmployee()

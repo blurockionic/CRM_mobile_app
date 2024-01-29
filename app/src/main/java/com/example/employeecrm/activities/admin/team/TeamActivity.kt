@@ -15,6 +15,7 @@ import com.example.employeecrm.APIServices.Apis
 import com.example.employeecrm.R
 import com.example.employeecrm.adapters.SelectedTeamMembersAdapter
 import com.example.employeecrm.adapters.TeamMembersAdapter
+import com.example.employeecrm.base.BaseActivity
 import com.example.employeecrm.databinding.ActivityTeamBinding
 import com.example.employeecrm.model.Employee
 import com.example.employeecrm.model.LoginManager
@@ -25,7 +26,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
-class TeamActivity : AppCompatActivity() {
+class TeamActivity : BaseActivity() {
     private lateinit var binding: ActivityTeamBinding
 
     //    for employee details
@@ -51,7 +52,7 @@ class TeamActivity : AppCompatActivity() {
     private lateinit var adminId: String
 
     //base url
-    private  var BASE_URL = "http://192.168.1.8:4000/"
+    private  var BASE_URL = "http://192.168.1.5:4000/"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTeamBinding.inflate(layoutInflater)
@@ -64,7 +65,8 @@ class TeamActivity : AppCompatActivity() {
         if (storedLoginResponse != null) {
             token = storedLoginResponse.token
             adminId = storedLoginResponse.user._id
-            Log.d("response result", adminId)
+        }else{
+            token = getAuthToken()
         }
 
         val teamName = intent.getStringExtra("teamName")

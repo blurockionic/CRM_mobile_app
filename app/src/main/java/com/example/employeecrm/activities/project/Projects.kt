@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.employeecrm.APIServices.Apis
 import com.example.employeecrm.adapters.AllProjectAdapter
+import com.example.employeecrm.base.BaseActivity
 import com.example.employeecrm.databinding.ActivityProjectsBinding
 import com.example.employeecrm.model.LoginManager
 import com.example.employeecrm.model.Project
@@ -19,7 +20,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
-class Projects : AppCompatActivity() {
+class Projects : BaseActivity() {
     private lateinit var binding: ActivityProjectsBinding
     //for storing the token
     private lateinit var token: String
@@ -27,7 +28,7 @@ class Projects : AppCompatActivity() {
     private val allProject: MutableList<Project> = mutableListOf()
 
     // Base URL of your API
-    private val BASE_URL = "http://192.168.1.8:4000/"
+    private val BASE_URL = "http://192.168.1.5:4000/"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProjectsBinding.inflate(layoutInflater)
@@ -36,10 +37,7 @@ class Projects : AppCompatActivity() {
         // Checking if a login response is stored and accessing its properties
         val storedLoginResponse = LoginManager.loginResponse
 
-        if (storedLoginResponse != null) {
-            token = storedLoginResponse.token
-            Log.d("response result", token)
-        }
+        token = storedLoginResponse?.token ?: getAuthToken()
 //        handle for get the project details
         getProjects()
     }

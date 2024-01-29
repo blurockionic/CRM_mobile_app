@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.employeecrm.APIServices.Apis
 import com.example.employeecrm.adapters.AllTeamListAdapter
+import com.example.employeecrm.base.BaseActivity
 import com.example.employeecrm.databinding.ActivityTeamListBinding
 import com.example.employeecrm.model.LoginManager
 import com.example.employeecrm.model.Team
@@ -16,14 +17,14 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class TeamList : AppCompatActivity() {
+class TeamList : BaseActivity() {
     private lateinit var binding: ActivityTeamListBinding
 
     private  var allTeam: MutableList<Team> = mutableListOf()
 
     private lateinit var token : String
 
-    private  var BASE_URL = "http://192.168.1.8:4000/"
+    private  var BASE_URL = "http://192.168.1.5:4000/"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTeamListBinding.inflate(layoutInflater)
@@ -32,9 +33,7 @@ class TeamList : AppCompatActivity() {
         // Checking if a login response is stored and accessing its properties
         val storedLoginResponse = LoginManager.loginResponse
 
-        if (storedLoginResponse != null) {
-            token = storedLoginResponse.token
-        }
+        token = storedLoginResponse?.token ?: getAuthToken()
 
         binding.btnCreateNewTeam.setOnClickListener {
             startActivity(Intent(this, TeamActivity::class.java))

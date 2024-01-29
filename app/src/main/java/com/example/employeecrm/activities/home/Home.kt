@@ -1,6 +1,7 @@
 package com.example.employeecrm.activities.home
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -25,6 +26,8 @@ import com.example.employeecrm.activities.admin.employee.EmployeeList
 import com.example.employeecrm.activities.admin.team.TeamActivity
 import com.example.employeecrm.activities.admin.team.TeamList
 import com.example.employeecrm.activities.project.Projects
+import com.example.employeecrm.auth.Login
+import com.example.employeecrm.base.BaseActivity
 import com.example.employeecrm.databinding.ActivityHomeBinding
 import com.example.employeecrm.model.Employee
 import com.example.employeecrm.model.LoginManager
@@ -43,7 +46,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class Home : AppCompatActivity() {
+class Home : BaseActivity() {
     //    for bind the data
     private lateinit var binding: ActivityHomeBinding
 
@@ -75,7 +78,7 @@ class Home : AppCompatActivity() {
 
 
     // Base URL of your API
-    private val BASE_URL = "http://192.168.1.8:4000/"
+    private val BASE_URL = "http://192.168.1.5:4000/"
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,10 +129,7 @@ class Home : AppCompatActivity() {
         // Checking if a login response is stored and accessing its properties
         val storedLoginResponse = LoginManager.loginResponse
 
-        if (storedLoginResponse != null) {
-            token = storedLoginResponse.token
-            Log.d("response result", token)
-        }
+        token = storedLoginResponse?.token ?: getAuthToken()
 
         updateNavigationUserDetails(storedLoginResponse)
 
@@ -152,6 +152,9 @@ class Home : AppCompatActivity() {
 
                 R.id.team -> {
                     startActivity(Intent(this, TeamList::class.java))
+                }
+                R.id.logout ->{
+                    logout()
                 }
                 else -> {
                     // Handle other menu item clicks here if needed
@@ -536,5 +539,18 @@ class Home : AppCompatActivity() {
         }
 
     }
+
+
+    // Function to clear the authentication token
+    private fun logout() {
+        val sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.remove("authToken")
+        editor.apply()
+
+        startActivity(Intent(this@Home, Login::class.java))
+        finish()
+    }
+
 
 }
