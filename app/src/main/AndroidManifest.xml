@@ -21,6 +21,9 @@
             android:name=".activities.employee.dashboard.EmployeeDashboard"
             android:exported="false" />
         <activity
+            android:name=".activities.manager.dashboard.ManagerDashboard"
+            android:exported="false" />
+        <activity
             android:name=".activities.splashscreen.SplashScreen"
             android:exported="true">
             <intent-filter>
@@ -49,9 +52,6 @@
             android:exported="false" />
         <activity
             android:name=".activities.admin.project.Projects"
-            android:exported="false" />
-        <activity
-            android:name=".activities.admin.AdminDashboard"
             android:exported="false" />
         <activity
             android:name=".activities.admin.dashboard.Dashboard"

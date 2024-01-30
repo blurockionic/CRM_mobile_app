@@ -242,7 +242,6 @@ class Dashboard : BaseActivity() {
         findViewById<Toolbar>(R.id.my_toolbar).setNavigationIcon(R.drawable.home)
 
         findViewById<Toolbar>(R.id.my_toolbar).setNavigationOnClickListener {
-            Log.d("clicked", "clicked")
             toggleDrawer()
         }
     }
@@ -263,9 +262,6 @@ class Dashboard : BaseActivity() {
             .build()
 
         val apiService = retrofit.create(Apis::class.java)
-
-
-
 
         lifecycleScope.launch {
             try {

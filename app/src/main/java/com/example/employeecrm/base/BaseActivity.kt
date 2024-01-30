@@ -14,6 +14,7 @@ open class BaseActivity:AppCompatActivity() {
         return sharedPreferences.getString("authToken", null).toString()
     }
 
+
      fun logout() {
         val sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
