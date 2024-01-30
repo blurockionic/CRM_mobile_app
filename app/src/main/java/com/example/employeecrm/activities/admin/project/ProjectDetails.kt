@@ -1,4 +1,4 @@
-package com.example.employeecrm.activities.project
+package com.example.employeecrm.activities.admin.project
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

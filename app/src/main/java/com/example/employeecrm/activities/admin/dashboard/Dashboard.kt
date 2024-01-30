@@ -1,9 +1,8 @@
-package com.example.employeecrm.activities.home
+package com.example.employeecrm.activities.admin.dashboard
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -21,13 +20,12 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import com.example.employeecrm.APIServices.Apis
 import com.example.employeecrm.R
-import com.example.employeecrm.activities.admin.AdminDashboard
 import com.example.employeecrm.activities.admin.employee.EmployeeList
-import com.example.employeecrm.activities.admin.team.TeamActivity
 import com.example.employeecrm.activities.admin.team.TeamList
-import com.example.employeecrm.activities.project.Projects
+import com.example.employeecrm.activities.admin.project.Projects
 import com.example.employeecrm.auth.Login
 import com.example.employeecrm.base.BaseActivity
+import com.example.employeecrm.constant.Constant
 import com.example.employeecrm.databinding.ActivityHomeBinding
 import com.example.employeecrm.model.Employee
 import com.example.employeecrm.model.LoginManager
@@ -46,7 +44,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class Home : BaseActivity() {
+class Dashboard : BaseActivity() {
     //    for bind the data
     private lateinit var binding: ActivityHomeBinding
 
@@ -78,7 +76,7 @@ class Home : BaseActivity() {
 
 
     // Base URL of your API
-    private val BASE_URL = "http://192.168.1.5:4000/"
+    private val BASE_URL = Constant.server
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,10 +112,6 @@ class Home : BaseActivity() {
                 mainContent.findViewById<EditText>(R.id.etWebsiteUrl).text.trim().toString()
 
 
-
-            Log.d("selected", "$selectedTeam, $selectedManagerName, $selectedPriority")
-            Log.d("selected", "$projectName, $des, $startDate, $submissionDate")
-
             createProjectFormLayout.visibility = View.GONE
             btnCreateNew.visibility = View.VISIBLE
 
@@ -139,7 +133,7 @@ class Home : BaseActivity() {
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.admin_dashboard -> {
-                    startActivity(Intent(this, AdminDashboard::class.java))
+                    startActivity(Intent(this, Dashboard::class.java))
                 }
 
                 R.id.project -> {
@@ -213,7 +207,7 @@ class Home : BaseActivity() {
                     val success = response.body()
                     if (success != null) {
                         // Handle successful login response
-                        startActivity(Intent(this@Home, Projects::class.java))
+                        startActivity(Intent(this@Dashboard, Projects::class.java))
                     } else {
                         //Handle scenario where response body is null
                         Log.d("error new project ", "Empty response body")
@@ -337,7 +331,7 @@ class Home : BaseActivity() {
 
                         // Create an ArrayAdapter using the managerNames array and a default spinner layout
                         val adapter = ArrayAdapter(
-                            this@Home,
+                            this@Dashboard,
                             android.R.layout.simple_spinner_item,
                             managerNames
                         )
@@ -541,16 +535,8 @@ class Home : BaseActivity() {
     }
 
 
-    // Function to clear the authentication token
-    private fun logout() {
-        val sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.remove("authToken")
-        editor.apply()
 
-        startActivity(Intent(this@Home, Login::class.java))
-        finish()
-    }
+
 
 
 }

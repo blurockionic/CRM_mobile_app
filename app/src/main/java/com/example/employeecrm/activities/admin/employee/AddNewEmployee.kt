@@ -11,8 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.employeecrm.APIServices.Apis
 import com.example.employeecrm.R
-import com.example.employeecrm.activities.project.Projects
+import com.example.employeecrm.activities.admin.project.Projects
 import com.example.employeecrm.base.BaseActivity
+import com.example.employeecrm.constant.Constant
 import com.example.employeecrm.databinding.ActivityAddNewEmployeeBinding
 import com.example.employeecrm.model.LoginManager
 import com.example.employeecrm.model.NewEmployee
@@ -37,7 +38,7 @@ class AddNewEmployee : BaseActivity() {
     private lateinit var token:String
 
     //base url
-    private val BASE_URL = "http://192.168.1.5:4000/"
+    private val BASE_URL = Constant.server
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddNewEmployeeBinding.inflate(layoutInflater)

@@ -1,4 +1,4 @@
-package com.example.employeecrm.activities.project
+package com.example.employeecrm.activities.admin.project
 
 
 import android.content.Intent
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.employeecrm.APIServices.Apis
 import com.example.employeecrm.adapters.AllProjectAdapter
 import com.example.employeecrm.base.BaseActivity
+import com.example.employeecrm.constant.Constant
 import com.example.employeecrm.databinding.ActivityProjectsBinding
 import com.example.employeecrm.model.LoginManager
 import com.example.employeecrm.model.Project
@@ -28,7 +29,7 @@ class Projects : BaseActivity() {
     private val allProject: MutableList<Project> = mutableListOf()
 
     // Base URL of your API
-    private val BASE_URL = "http://192.168.1.5:4000/"
+    private val BASE_URL = Constant.server
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProjectsBinding.inflate(layoutInflater)

@@ -8,8 +8,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.employeecrm.APIServices.Apis
-import com.example.employeecrm.MainActivity
-import com.example.employeecrm.activities.home.Home
+import com.example.employeecrm.activities.admin.dashboard.Dashboard
+import com.example.employeecrm.activities.splashscreen.SplashScreen
+import com.example.employeecrm.constant.Constant
 import com.example.employeecrm.databinding.ActivityLoginBinding
 import com.example.employeecrm.model.LoginManager
 import com.example.employeecrm.model.LoginRequest
@@ -23,7 +24,7 @@ import java.io.IOException
 
 class Login : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private val BASE_URL = "http://192.168.1.5:4000/api/v1/users/" // Remove '/users/login' from the base URL
+    private val BASE_URL = "${Constant.server}api/v1/users/" // Remove '/users/login' from the base URL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +59,8 @@ class Login : AppCompatActivity() {
                         Log.d("LoginSuccess", "${loginResponse.success}")
                         Log.d("LoginSuccess", loginResponse.toString())
 
+                       var  user = User(loginResponse.user._id, loginResponse.user.name, loginResponse.user.email, loginResponse.user.designation,loginResponse.user.designationType)
+
                         val receivedLoginResponse = LoginResponse(
                             loginResponse.success,
                             loginResponse.message,
@@ -70,9 +73,9 @@ class Login : AppCompatActivity() {
 
                         if(loginResponse.success){
                             // Save the token to SharedPreferences or another secure storage
-                            saveAuthToken(loginResponse.token)
+                            saveAuthToken(loginResponse.token, user)
                             Toast.makeText(this@Login, "${loginResponse.message}", Toast.LENGTH_LONG).show()
-                            startActivity(Intent(this@Login, Home::class.java))
+                            startActivity(Intent(this@Login, SplashScreen::class.java))
                             finish()
                         }
                     } else {
@@ -94,10 +97,11 @@ class Login : AppCompatActivity() {
         }
     }
 
-    private fun saveAuthToken(token: String) {
+    private fun saveAuthToken(token: String, user: User, ) {
         val sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit();
         editor.putString("authToken", token)
+        editor.putString("designationType", user.designationType)
         editor.apply()
     }
 }

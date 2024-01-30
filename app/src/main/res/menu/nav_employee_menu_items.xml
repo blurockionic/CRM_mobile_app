@@ -1,4 +1,4 @@
-<!-- nav_menu_items.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
@@ -6,17 +6,17 @@
             android:icon="@drawable/dashboard"
             android:title="Dashboard" />
         <item
-            android:id="@+id/project"
+            android:id="@+id/task"
             android:icon="@drawable/project"
-            android:title="Project" />
+            android:title="Task" />
         <item
-            android:id="@+id/employee"
+            android:id="@+id/profile"
             android:icon="@drawable/user"
-            android:title="Employee" />
+            android:title="Profile" />
         <item
-            android:id="@+id/team"
+            android:id="@+id/assets"
             android:icon="@drawable/user"
-            android:title="Team" />
+            android:title="Assets"/>
         <item
             android:id="@+id/logout"
             android:icon="@drawable/logout"

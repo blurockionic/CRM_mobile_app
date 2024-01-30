@@ -8,16 +8,11 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-
-
     <!-- Main content -->
     <include
         layout="@layout/header_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <!-- Your main content here -->
-
     </include>
 
     <!-- NavigationView for the drawer menu -->
