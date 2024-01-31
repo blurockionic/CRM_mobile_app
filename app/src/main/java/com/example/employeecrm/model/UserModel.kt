@@ -21,7 +21,8 @@ data class User(
     val name:String,
     val email: String,
     val designation: String,
-    val designationType:String
+    val designationType:String,
+    val employeeId:String
 )
 
 

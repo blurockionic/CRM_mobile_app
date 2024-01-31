@@ -1,5 +1,6 @@
 package com.example.employeecrm.activities.manager.dashboard
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import com.example.employeecrm.APIServices.Apis
 import com.example.employeecrm.R
+import com.example.employeecrm.activities.admin.employee.EmployeeList
+import com.example.employeecrm.activities.manager.project.ManagerProject
 import com.example.employeecrm.base.BaseActivity
 import com.example.employeecrm.constant.Constant
 import com.example.employeecrm.databinding.ActivityManagerDashboardBinding
@@ -43,6 +46,12 @@ class ManagerDashboard : BaseActivity() {
 //        navigate to the different pages
         binding.navigationView.setNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId){
+                R.id.employee->{
+                    startActivity(Intent(this, EmployeeList::class.java))
+                }
+                R.id.project->{
+                    startActivity(Intent(this, ManagerProject::class.java))
+                }
                 R.id.logout->{
                     logout()
                 }

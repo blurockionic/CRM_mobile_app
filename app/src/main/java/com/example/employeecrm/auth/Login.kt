@@ -56,16 +56,13 @@ class Login : AppCompatActivity() {
                     val loginResponse = response.body()
                     if (loginResponse != null) {
                         // Handle successful login response
-                        Log.d("LoginSuccess", "${loginResponse.success}")
-                        Log.d("LoginSuccess", loginResponse.toString())
-
-                       var  user = User(loginResponse.user._id, loginResponse.user.name, loginResponse.user.email, loginResponse.user.designation,loginResponse.user.designationType)
+                       val user = User(loginResponse.user._id, loginResponse.user.name, loginResponse.user.email, loginResponse.user.designation,loginResponse.user.designationType, loginResponse.user.employeeId)
 
                         val receivedLoginResponse = LoginResponse(
                             loginResponse.success,
                             loginResponse.message,
                             loginResponse.token,
-                            user = User(loginResponse.user._id, loginResponse.user.name, loginResponse.user.email, loginResponse.user.designation,loginResponse.user.designationType)
+                            user = User(loginResponse.user._id, loginResponse.user.name, loginResponse.user.email, loginResponse.user.designation,loginResponse.user.designationType, loginResponse.user.employeeId)
                         )
 
                         // Storing the login response in the LoginManager
@@ -74,10 +71,12 @@ class Login : AppCompatActivity() {
                         if(loginResponse.success){
                             // Save the token to SharedPreferences or another secure storage
                             saveAuthToken(loginResponse.token, user)
-                            Toast.makeText(this@Login, "${loginResponse.message}", Toast.LENGTH_LONG).show()
-                            startActivity(Intent(this@Login, SplashScreen::class.java))
-                            finish()
                         }
+
+                        //after successful login user redirected to their dashboard
+                        startActivity(Intent(this@Login, SplashScreen::class.java))
+                        finish()
+
                     } else {
                         // Handle scenario where response body is null
                         Log.d("LoginError", "Empty response body")
@@ -102,6 +101,8 @@ class Login : AppCompatActivity() {
         val editor = sharedPreferences.edit();
         editor.putString("authToken", token)
         editor.putString("designationType", user.designationType)
+        editor.putString("employeeId", user.employeeId)
         editor.apply()
+
     }
 }

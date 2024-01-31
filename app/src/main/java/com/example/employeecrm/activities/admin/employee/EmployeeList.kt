@@ -35,15 +35,7 @@ class EmployeeList : BaseActivity() {
 
         val storedLoginResponse = LoginManager.loginResponse
 
-        if (storedLoginResponse != null) {
-            token = storedLoginResponse.token
-        }else{
-            token = getAuthToken()
-        }
-
-
-
-
+        token = storedLoginResponse?.token ?: getAuthToken()
 
         initializeUI()
         getEmployee()
