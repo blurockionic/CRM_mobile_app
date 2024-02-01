@@ -44,11 +44,13 @@ class SplashScreen : BaseActivity() {
                 navigateBasedOnDesignation(designationType)
             }
         } else {
-            // Checking if a login response is stored and accessing its properties
-            val storedLoginResponse = LoginManager.loginResponse
-            if (storedLoginResponse != null) {
-                initializeTokenWithStorage(storedLoginResponse.token)
-            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                showToast("Invalid or missing")
+                // No valid token, navigate to the login screen
+                val intent = Intent(this, Login::class.java)
+                startActivity(intent)
+                finish()
+            }, 1000)
         }
     }
 

@@ -61,7 +61,6 @@ class ManagerProject : BaseActivity() {
                 if (projectResponse != null){
                         val proj = projectResponse.allProject.filter { it -> it.managerId == employeeId }
                         allProject.addAll(proj)
-                    Log.d("all project ", allProject.toString())
 //                    invoke
                     showManagerProjectList(allProject)
                 }else{
@@ -93,6 +92,11 @@ class ManagerProject : BaseActivity() {
         adapter.setOnAssignTaskListener(object : ManagerAllProjectAdapter.OnClickListener{
             override fun onCLick(position: Int, model: Project) {
                 showToast("clicked on assign task")
+                showToast("Clicked on assign task")
+                val intent = Intent(this@ManagerProject, AssignTask::class.java)
+                intent.putExtra("projectName", model.projectName)
+                intent.putExtra("projectId", model._id)
+                startActivity(intent)
             }
         })
 

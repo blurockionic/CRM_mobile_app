@@ -52,10 +52,12 @@ interface Apis {
     @POST("api/v1/team/CreateNewTeam")
     suspend fun createNewTeam(
         @Body newTeam: NewTeam,
+        @Header("Content-Type") contentType: String = "application/json",
         @Header("Cookie") token: String
     ): Response<Success>
 
-//    get all the team
+
+    //    get all the team
     @GET("api/v1/team/allTeams")
     suspend fun allTeam(@Header("Cookie") token: String): Response<AllTeam>
 }

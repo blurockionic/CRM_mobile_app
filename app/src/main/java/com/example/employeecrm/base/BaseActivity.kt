@@ -20,6 +20,11 @@ open class BaseActivity:AppCompatActivity() {
         return sharedPreferences.getString("employeeId", null).toString()
     }
 
+    fun getAdminId(): String {
+        val sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("adminId", null).toString()
+    }
+
 
      fun logout() {
         val sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)

@@ -56,13 +56,13 @@ class Login : AppCompatActivity() {
                     val loginResponse = response.body()
                     if (loginResponse != null) {
                         // Handle successful login response
-                       val user = User(loginResponse.user._id, loginResponse.user.name, loginResponse.user.email, loginResponse.user.designation,loginResponse.user.designationType, loginResponse.user.employeeId)
+                       val user = User(loginResponse.user._id, loginResponse.user.name, loginResponse.user.email, loginResponse.user.designation,loginResponse.user.designationType)
 
                         val receivedLoginResponse = LoginResponse(
                             loginResponse.success,
                             loginResponse.message,
                             loginResponse.token,
-                            user = User(loginResponse.user._id, loginResponse.user.name, loginResponse.user.email, loginResponse.user.designation,loginResponse.user.designationType, loginResponse.user.employeeId)
+                            user = User(loginResponse.user._id, loginResponse.user.name, loginResponse.user.email, loginResponse.user.designation,loginResponse.user.designationType)
                         )
 
                         // Storing the login response in the LoginManager
@@ -84,7 +84,7 @@ class Login : AppCompatActivity() {
                 } else {
                     // Handle unsuccessful login (e.g., invalid credentials, server errors)
                     val errorBody = response.errorBody()?.string()
-                    Log.d("LoginError", "Error: $errorBody")
+                    Log.d("LoginError", "Error else: $errorBody")
                 }
             } catch (e: IOException) {
                 // Handle network issues or I/O problems
@@ -101,8 +101,13 @@ class Login : AppCompatActivity() {
         val editor = sharedPreferences.edit();
         editor.putString("authToken", token)
         editor.putString("designationType", user.designationType)
-        editor.putString("employeeId", user.employeeId)
+        editor.putString("adminId", user._id)
+
         editor.apply()
+
+//        editor.putString("employeeId", user.employeeId
+
+
 
     }
 }

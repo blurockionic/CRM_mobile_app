@@ -57,17 +57,18 @@ class TeamList : BaseActivity() {
                 if(response.isSuccessful){
                     val teamResponse = response.body()
                     if (teamResponse !=null){
-                        for (team in teamResponse.allTeams){
+                        for (team in teamResponse.allTeamsData){
                             allTeam.add(team)
                         }
+                        Log.d("allteam", "$allTeam")
 
                         handleOnShowTeamList(allTeam)
                     }
                 }else{
-                    Log.d("error", "error in else block")
+                    Log.d("error else", "error in else block")
                 }
             }catch (e:Exception){
-                Log.d("error", e.message.toString())
+                Log.d("error catch", e.message.toString())
             }
         }
     }
@@ -100,7 +101,6 @@ class TeamList : BaseActivity() {
                 val intent = Intent(this@TeamList, TeamActivity::class.java)
                 intent.putExtra("teamName", model.teamName)
                 intent.putExtra("teamId", model._id)
-
                 startActivity(intent)
             }
         })

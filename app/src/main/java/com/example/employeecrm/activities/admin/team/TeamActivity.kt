@@ -1,7 +1,6 @@
 package com.example.employeecrm.activities.admin.team
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -16,6 +15,7 @@ import com.example.employeecrm.R
 import com.example.employeecrm.adapters.SelectedTeamMembersAdapter
 import com.example.employeecrm.adapters.TeamMembersAdapter
 import com.example.employeecrm.base.BaseActivity
+import com.example.employeecrm.constant.Constant
 import com.example.employeecrm.databinding.ActivityTeamBinding
 import com.example.employeecrm.model.Employee
 import com.example.employeecrm.model.LoginManager
@@ -34,7 +34,7 @@ class TeamActivity : BaseActivity() {
     //employee copy details
     private var employeeDetailsDup: MutableList<Employee> = mutableListOf()
 
-    private var selectedEmp :  MutableList<String> = mutableListOf()
+    private var selectedEmp :  MutableList<Employee> = mutableListOf()
 
     //managerList
     private var managerList : MutableList<Employee> = mutableListOf()
@@ -52,7 +52,7 @@ class TeamActivity : BaseActivity() {
     private lateinit var adminId: String
 
     //base url
-    private  var BASE_URL = "http://192.168.1.5:4000/"
+    private  var BASE_URL = Constant.server
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTeamBinding.inflate(layoutInflater)
@@ -67,10 +67,12 @@ class TeamActivity : BaseActivity() {
             adminId = storedLoginResponse.user._id
         }else{
             token = getAuthToken()
+            adminId = getAdminId()
         }
 
         val teamName = intent.getStringExtra("teamName")
         val teamId = intent.getStringExtra("teamId")
+
 
         //set the value
 
@@ -115,7 +117,7 @@ class TeamActivity : BaseActivity() {
         adminId: String,
         projectId: String,
         managerId: String,
-        selectedEmp: MutableList<String>
+        selectedEmp: MutableList<Employee>
     ) {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -135,6 +137,7 @@ class TeamActivity : BaseActivity() {
                         "$projectId",
                         "$selectedEmp"
                     ),
+                    "application/json",
                     "token=$token"
                 )
 
@@ -262,6 +265,8 @@ class TeamActivity : BaseActivity() {
                             }
                         }
 
+                        Log.d("managerList", "$managerList")
+
 
 
                         //load manager list in spinner
@@ -340,7 +345,8 @@ class TeamActivity : BaseActivity() {
             override fun onCLick(position: Int, model: Employee) {
                 Toast.makeText(this@TeamActivity, "clicked ${model.employeeName}", Toast.LENGTH_LONG).show()
                 list.add(model)
-                selectedEmp.add(model._id)
+                selectedEmp.add(model)
+                Log.d("model", "$selectedEmp")
                 selectedMembers(list, employeeDetailsDup)
                 // Create a mutable copy of the original list to avoid modifying the input parameter
                 // Remove the clicked item from the copy
