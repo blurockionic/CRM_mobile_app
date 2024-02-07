@@ -74,6 +74,7 @@ class Projects : BaseActivity() {
                 val response = apiServices.getProjectDetails("token=$token")
                 if (response.isSuccessful) {
                     val projectResponse = response.body()
+                    showToast("${projectResponse?.allProject}")
                     if (projectResponse != null) {
                         for(project in projectResponse.allProject){
 //                            push all the project

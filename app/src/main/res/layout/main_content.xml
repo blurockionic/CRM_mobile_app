@@ -237,15 +237,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="Create New Project"
-                    android:textAlignment="center"
-                    android:textColor="#16a34a"
-                    android:textSize="18dp" />
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:layout_marginBottom="5dp"-->
+<!--                    android:text="Create New Project"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:textColor="#16a34a"-->
+<!--                    android:textSize="18dp" />-->
                 <!--                project name -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilProjectName"
@@ -266,7 +266,7 @@
                     android:id="@+id/tilProjectDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp">
+                    android:layout_margin="5dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etProjectDescription"
@@ -286,7 +286,7 @@
                     android:id="@+id/tilProjectStartDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp">
+                    android:layout_margin="5dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etProjectStartDate"
@@ -303,7 +303,7 @@
                     android:id="@+id/tilSubmissionDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp">
+                    android:layout_margin="5dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSubmissionDate"
@@ -388,7 +388,7 @@
                     android:id="@+id/tilWebsiteUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp">
+                    android:layout_margin="5dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etWebsiteUrl"

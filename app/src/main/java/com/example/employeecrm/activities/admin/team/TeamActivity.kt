@@ -19,8 +19,8 @@ import com.example.employeecrm.constant.Constant
 import com.example.employeecrm.databinding.ActivityTeamBinding
 import com.example.employeecrm.model.Employee
 import com.example.employeecrm.model.LoginManager
-import com.example.employeecrm.model.NewTeam
 import com.example.employeecrm.model.Project
+import com.example.employeecrm.model.TeamRequestModel
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -34,7 +34,7 @@ class TeamActivity : BaseActivity() {
     //employee copy details
     private var employeeDetailsDup: MutableList<Employee> = mutableListOf()
 
-    private var selectedEmp :  MutableList<Employee> = mutableListOf()
+    private var selectedEmp :  MutableList<String> = mutableListOf()
 
     //managerList
     private var managerList : MutableList<Employee> = mutableListOf()
@@ -47,9 +47,9 @@ class TeamActivity : BaseActivity() {
     //for storing the token
     private lateinit var token: String
 
-    private lateinit var managerId : String
-    private lateinit var projectId : String
-    private lateinit var adminId: String
+    private  var managerId : String = ""
+    private  var projectId : String = ""
+    private  var adminId: String = ""
 
     //base url
     private  var BASE_URL = Constant.server
@@ -100,12 +100,10 @@ class TeamActivity : BaseActivity() {
 
     private fun createTeam(adminId: String) {
         binding.btnSubmit.setOnClickListener {
-            Toast.makeText(this@TeamActivity, "Working on this module", Toast.LENGTH_SHORT).show()
             val teamName = binding.etTeamName.text.toString()
             val teamDescription =  binding.etTeamDescription.text.toString()
 
-            Log.d("alldata", "$teamName, $teamDescription, $projectId, $managerId, $selectedEmp, $adminId")
-
+            Log.d("all team details", " ${teamName}, ${teamDescription}, ${adminId}, ${projectId}, ${managerId}, ${selectedEmp}")
             handleOnCreateTeam(teamName, teamDescription, adminId, projectId, managerId, selectedEmp)
 
         }
@@ -117,8 +115,17 @@ class TeamActivity : BaseActivity() {
         adminId: String,
         projectId: String,
         managerId: String,
-        selectedEmp: MutableList<Employee>
+        selectedEmp: MutableList<String>
     ) {
+        val requestBody = TeamRequestModel(
+            teamName,
+             teamDescription,
+             adminId,
+             selectedEmp,
+             managerId,
+             projectId
+        )
+
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -129,32 +136,24 @@ class TeamActivity : BaseActivity() {
         lifecycleScope.launch {
             try {
                 val response = apiServices.createNewTeam(
-                    NewTeam(
-                        "$teamName",
-                        "$teamDescription",
-                        "$adminId",
-                        "$managerId",
-                        "$projectId",
-                        "$selectedEmp"
-                    ),
+                    requestBody,
                     "application/json",
                     "token=$token"
                 )
 
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     val success = response.body()
-                    if (success != null){
-                        Log.d("alldata", "team created successfully!")
+                    if (success != null) {
+                        Log.d("alldata", "Team created successfully!")
                         startActivity(Intent(this@TeamActivity, TeamList::class.java))
-                    }else{
-                        //Handle scenario where response body is null
+                    } else {
                         Log.d("alldata error new project ", "Empty response body")
                     }
-                }else{
+                } else {
                     val errorBody = response.errorBody()?.string()
                     Log.d("alldata error new team ", "Error: $errorBody")
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 Log.e("alldata", e.message.toString())
             }
         }
@@ -345,7 +344,7 @@ class TeamActivity : BaseActivity() {
             override fun onCLick(position: Int, model: Employee) {
                 Toast.makeText(this@TeamActivity, "clicked ${model.employeeName}", Toast.LENGTH_LONG).show()
                 list.add(model)
-                selectedEmp.add(model)
+                selectedEmp.add(model._id)
                 Log.d("model", "$selectedEmp")
                 selectedMembers(list, employeeDetailsDup)
                 // Create a mutable copy of the original list to avoid modifying the input parameter

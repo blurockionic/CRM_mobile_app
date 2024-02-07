@@ -9,11 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.employeecrm.R
-import com.example.employeecrm.model.Team
+import com.example.employeecrm.model.AllTeamsData
 
 class AllTeamListAdapter(
     private val context: Context,
-    private val list: MutableList<Team>
+    private val list: MutableList<AllTeamsData>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var onItemClick: OnClickListener? = null
@@ -59,7 +59,7 @@ class AllTeamListAdapter(
     }
 
     interface OnClickListener {
-        fun onCLick(position: Int, model: Team)
+        fun onCLick(position: Int, model: AllTeamsData)
     }
 
     private class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)

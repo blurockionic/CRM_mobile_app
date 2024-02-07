@@ -10,7 +10,6 @@ data class MyProfile(val success:Boolean, val message: String,  val user: User)
 
 data class ProjectDetailsRes(val success: Boolean, val message: String, val allProject: MutableList<Project>)
 
-data class AllTeam(val success: Boolean, val message: String, val allTeamsData: MutableList<Team>)
 
 data class Success(val success: Boolean, val message: String)
 
@@ -109,11 +108,7 @@ data class NewTeam(
 )
 
 
-data class Team(
-    val _id: String,
-    val teamName: String,
-    val teamDescription: String?
-)
+
 
 
 

@@ -12,8 +12,8 @@ import com.example.employeecrm.adapters.AllTeamListAdapter
 import com.example.employeecrm.base.BaseActivity
 import com.example.employeecrm.constant.Constant
 import com.example.employeecrm.databinding.ActivityTeamListBinding
+import com.example.employeecrm.model.AllTeamsData
 import com.example.employeecrm.model.LoginManager
-import com.example.employeecrm.model.Team
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -21,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class TeamList : BaseActivity() {
     private lateinit var binding: ActivityTeamListBinding
 
-    private  var allTeam: MutableList<Team> = mutableListOf()
+    private  var allTeam: MutableList<AllTeamsData> = mutableListOf()
 
     private lateinit var token : String
 
@@ -60,8 +60,6 @@ class TeamList : BaseActivity() {
                         for (team in teamResponse.allTeamsData){
                             allTeam.add(team)
                         }
-                        Log.d("allteam", "$allTeam")
-
                         handleOnShowTeamList(allTeam)
                     }
                 }else{
@@ -73,7 +71,7 @@ class TeamList : BaseActivity() {
         }
     }
 
-    private fun handleOnShowTeamList(allTeam: MutableList<Team>) {
+    private fun handleOnShowTeamList(allTeam: MutableList<AllTeamsData>) {
         Log.d("allteam", allTeam.toString())
         binding.rvTeamList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false
         )
@@ -85,7 +83,7 @@ class TeamList : BaseActivity() {
 
         //function on click team
         adapter.setOnItemClickListener(object : AllTeamListAdapter.OnClickListener{
-            override fun onCLick(position: Int, model: Team) {
+            override fun onCLick(position: Int, model: AllTeamsData) {
                 Toast.makeText(this@TeamList, "clicked ${model.teamName}", Toast.LENGTH_LONG).show()
                 val intent = Intent(this@TeamList, TeamDetails::class.java)
                 intent.putExtra("teamName", model.teamName)
@@ -96,7 +94,7 @@ class TeamList : BaseActivity() {
 
         //function on click on edit
         adapter.setOnEditBtnClickListener(object : AllTeamListAdapter.OnClickListener{
-            override fun onCLick(position: Int, model: Team) {
+            override fun onCLick(position: Int, model: AllTeamsData) {
                 Toast.makeText(this@TeamList, "edit ${model.teamName}", Toast.LENGTH_LONG).show()
                 val intent = Intent(this@TeamList, TeamActivity::class.java)
                 intent.putExtra("teamName", model.teamName)

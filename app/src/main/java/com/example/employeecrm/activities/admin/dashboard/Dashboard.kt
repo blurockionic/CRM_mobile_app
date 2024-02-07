@@ -111,12 +111,12 @@ class Dashboard : BaseActivity() {
             val websiteUrl =
                 mainContent.findViewById<EditText>(R.id.etWebsiteUrl).text.trim().toString()
 
+//            invoke to send the project of employee cem
+            sendCreateNewProject(projectName, des, startDate, submissionDate, websiteUrl)
 
             createProjectFormLayout.visibility = View.GONE
             btnCreateNew.visibility = View.VISIBLE
 
-//            invoke to send the project of employee cem
-            sendCreateNewProject(projectName, des, startDate, submissionDate, websiteUrl)
         }
 
 
@@ -208,6 +208,7 @@ class Dashboard : BaseActivity() {
                     if (success != null) {
                         // Handle successful login response
                         startActivity(Intent(this@Dashboard, Projects::class.java))
+                        showToast("submitted"+response.message())
                     } else {
                         //Handle scenario where response body is null
                         Log.d("error new project ", "Empty response body")
