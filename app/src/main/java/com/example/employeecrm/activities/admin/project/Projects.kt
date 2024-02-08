@@ -14,8 +14,8 @@ import com.example.employeecrm.adapters.AllProjectAdapter
 import com.example.employeecrm.base.BaseActivity
 import com.example.employeecrm.constant.Constant
 import com.example.employeecrm.databinding.ActivityProjectsBinding
+import com.example.employeecrm.model.AllProject
 import com.example.employeecrm.model.LoginManager
-import com.example.employeecrm.model.Project
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,7 +26,7 @@ class Projects : BaseActivity() {
     //for storing the token
     private lateinit var token: String
     // for all project
-    private val allProject: MutableList<Project> = mutableListOf()
+    private val allProject: MutableList<AllProject> = mutableListOf()
 
     // Base URL of your API
     private val BASE_URL = Constant.server
@@ -43,7 +43,7 @@ class Projects : BaseActivity() {
         getProjects()
     }
 
-    private fun showProjectList(allProject: MutableList<Project>) {
+    private fun showProjectList(allProject: MutableList<AllProject>) {
         binding.rvProjectList.layoutManager = LinearLayoutManager(this@Projects,LinearLayoutManager.VERTICAL, false)
         binding.rvProjectList.setHasFixedSize(true)
 
@@ -53,7 +53,7 @@ class Projects : BaseActivity() {
 
         adapter.setOnClickListener(object :
         AllProjectAdapter.OnClickListener{
-            override fun onCLick(position: Int, model: Project) {
+            override fun onCLick(position: Int, model: AllProject) {
                 Toast.makeText(this@Projects, "clicked", Toast.LENGTH_LONG).show()
                 startActivity(Intent(this@Projects, ProjectDetails::class.java).putExtra("projectName", model.projectName).putExtra("projectDescription", model.description))
             }

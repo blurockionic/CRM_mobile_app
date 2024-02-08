@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.employeecrm.R
-import com.example.employeecrm.model.Project
+import com.example.employeecrm.model.AllProject
 
 open class AllProjectAdapter (
     private val context: Context,
-    private val list: MutableList<Project>
+    private val list: MutableList<AllProject>
 ):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     private var onItemClick: OnClickListener? = null
@@ -55,7 +55,7 @@ open class AllProjectAdapter (
 
 
     interface OnClickListener{
-        fun onCLick(position: Int, model: Project)
+        fun onCLick(position: Int, model: AllProject)
     }
 
     private class MyViewHolder(view: View): RecyclerView.ViewHolder(view)

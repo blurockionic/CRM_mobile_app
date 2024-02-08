@@ -17,9 +17,9 @@ import com.example.employeecrm.adapters.TeamMembersAdapter
 import com.example.employeecrm.base.BaseActivity
 import com.example.employeecrm.constant.Constant
 import com.example.employeecrm.databinding.ActivityTeamBinding
+import com.example.employeecrm.model.AllProject
 import com.example.employeecrm.model.Employee
 import com.example.employeecrm.model.LoginManager
-import com.example.employeecrm.model.Project
 import com.example.employeecrm.model.TeamRequestModel
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
@@ -40,7 +40,7 @@ class TeamActivity : BaseActivity() {
     private var managerList : MutableList<Employee> = mutableListOf()
 
     // for all project
-    private val allProject: MutableList<Project> = mutableListOf()
+    private val allProject: MutableList<AllProject> = mutableListOf()
 
     val list = mutableListOf<Employee>()
 
@@ -175,10 +175,10 @@ class TeamActivity : BaseActivity() {
                 if (response.isSuccessful) {
                     val projectResponse = response.body()
                     if (projectResponse != null) {
-                        for (project in projectResponse.allProject) {
-//                            push all the project
-                            allProject.add(project)
-                        }
+//                        for (item in projectResponse.project.iterator()) {
+////                            push all the project
+//                            allProject.add(item)
+//                        }
 
                         // Extract manager names from the list of employees
                         val projectName = allProject

@@ -40,6 +40,7 @@ class TeamList : BaseActivity() {
             startActivity(Intent(this, TeamActivity::class.java))
         }
 
+
         getAllTeam()
     }
 
@@ -53,7 +54,7 @@ class TeamList : BaseActivity() {
 
         lifecycleScope.launch {
             try {
-                val response = apiServices.allTeam("token=$token")
+                val response = apiServices.getAllTeam("token=$token")
                 if(response.isSuccessful){
                     val teamResponse = response.body()
                     if (teamResponse !=null){

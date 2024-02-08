@@ -1,7 +1,6 @@
 package com.example.employeecrm.activities.admin.dashboard
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,15 +22,15 @@ import com.example.employeecrm.R
 import com.example.employeecrm.activities.admin.employee.EmployeeList
 import com.example.employeecrm.activities.admin.team.TeamList
 import com.example.employeecrm.activities.admin.project.Projects
-import com.example.employeecrm.auth.Login
 import com.example.employeecrm.base.BaseActivity
 import com.example.employeecrm.constant.Constant
 import com.example.employeecrm.databinding.ActivityHomeBinding
+import com.example.employeecrm.model.AllProject
+import com.example.employeecrm.model.AllTeamsData
 import com.example.employeecrm.model.Employee
 import com.example.employeecrm.model.LoginManager
 import com.example.employeecrm.model.LoginResponse
-import com.example.employeecrm.model.Project
-import com.example.employeecrm.model.ProjectRequest
+import com.example.employeecrm.model.ProjectRequestModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -51,17 +50,20 @@ class Dashboard : BaseActivity() {
     //for storing the token
     private lateinit var token: String
 
+    //for all teams
+    private  var allTeam: MutableList<AllTeamsData> = mutableListOf()
+
     //    for employee details
     private val employeeDetails: MutableList<Employee> = mutableListOf()
 
     // for all project
-    private val allProject: MutableList<Project> = mutableListOf()
+    private val allProject: MutableList<AllProject> = mutableListOf()
 
     //for completed project
-    private val completedProject: MutableList<Project> = mutableListOf()
+    private val completedProject: MutableList<AllProject> = mutableListOf()
 
     //for ongoing project
-    private val ongoingProject: MutableList<Project> = mutableListOf()
+    private val ongoingProject: MutableList<AllProject> = mutableListOf()
 
     // for select manager
     private val managers: MutableList<Employee> = mutableListOf()
@@ -169,6 +171,11 @@ class Dashboard : BaseActivity() {
 
 
         setSpinner()
+
+        //get all the teams
+        getAllTeam()
+
+
     }
 
     //    handle for create new project
@@ -186,22 +193,25 @@ class Dashboard : BaseActivity() {
 
         val apiServices = retrofit.create(Apis::class.java)
 
+        val requestBody = ProjectRequestModel(
+            projectName,
+            des,
+            startDate,
+            submissionDate,
+            selectedPriority.lowercase(),
+            selectedTeam.lowercase(),
+            websiteUrl,
+            false,
+            false
+        );
+
+        Log.d("requestBody", "$requestBody")
 
         lifecycleScope.launch {
             try {
                 val response = apiServices.newProject(
-                    ProjectRequest(
-                        projectName,
-                        des,
-                        startDate,
-                        submissionDate,
-                        selectedManagerName.lowercase(),
-                        selectedPriority.lowercase(),
-                        selectedTeam.lowercase(),
-                        websiteUrl,
-                        false,
-                        false
-                    ), "token=$token"
+                    requestBody,
+                    "token=$token"
                 )
                 if (response.isSuccessful) {
                     val success = response.body()
@@ -403,18 +413,19 @@ class Dashboard : BaseActivity() {
                 val response = apiServices.getProjectDetails("token=$token")
                 if (response.isSuccessful) {
                     val projectResponse = response.body()
+                    Log.d("project details", "$projectResponse")
+
                     if (projectResponse != null) {
-                        for (project in projectResponse.allProject) {
+                        for (projects in projectResponse.allProject) {
 //                            push all the project
-                            allProject.add(project)
+                            allProject.add(projects)
 //                            for completed and in comleted project
-                            if (project.isCompleted) {
-                                completedProject.add(project)
+                            if (projects.isCompleted) {
+                                completedProject.add(projects)
                             } else {
-                                ongoingProject.add(project)
+                                ongoingProject.add(projects)
                             }
                         }
-                        Log.d("project details", "$allProject")
 
 //                        count all the project
                         tvProject.text = "${allProject.size}"
@@ -480,19 +491,19 @@ class Dashboard : BaseActivity() {
     private fun setSpinner() {
         val mainContent: View = findViewById(R.id.main_content)
         val spinnerPriority = mainContent.findViewById<Spinner>(R.id.spinnerPriority)
-        val spinnerTeam = mainContent.findViewById<Spinner>(R.id.spinnerTeam)
+
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, priorities)
-        val teamAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, teams)
+
 
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        teamAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
 
         // Apply the adapter to the spinner
         spinnerPriority.adapter = adapter
-        spinnerTeam.adapter = teamAdapter
+
 
 
         spinnerPriority.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -512,6 +523,52 @@ class Dashboard : BaseActivity() {
             }
         }
 
+
+    }
+
+    //handle for get all the teams
+
+    private fun getAllTeam() {
+        val retrofit =Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val apiServices = retrofit.create(Apis::class.java)
+
+        lifecycleScope.launch {
+            try {
+                val response = apiServices.getAllTeam("token=$token")
+                if(response.isSuccessful){
+                    val teamResponse = response.body()
+                    if (teamResponse !=null){
+                        for (team in teamResponse.allTeamsData){
+                            allTeam.add(team)
+                        }
+                        handleOnShowTeamList(allTeam)
+                    }
+                }else{
+                    Log.d("error else", "error in else block")
+                }
+            }catch (e:Exception){
+                Log.d("error catch", e.message.toString())
+            }
+        }
+    }
+
+    private fun handleOnShowTeamList(allTeam: MutableList<AllTeamsData>) {
+        val mainContent: View = findViewById(R.id.main_content)
+        val spinnerTeam = mainContent.findViewById<Spinner>(R.id.spinnerTeam)
+
+        // Extract manager names from the list of employees
+        val teamNames = allTeam.map { it.teamName }.toTypedArray()
+
+        val teamAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, teamNames);
+
+        teamAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinnerTeam.adapter = teamAdapter
+
         spinnerTeam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -519,9 +576,13 @@ class Dashboard : BaseActivity() {
                 position: Int,
                 id: Long
             ) {
-                val team = teams[position] // Get the selected priority
+                val team = teamNames[position] // Get the selected priority
                 // Handle the selected priority as needed
-                selectedTeam = team
+                val teamId =
+                    allTeam.filter { it.teamName == team }
+                        .joinToString { it._id }
+
+                selectedTeam = teamId
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -530,10 +591,4 @@ class Dashboard : BaseActivity() {
         }
 
     }
-
-
-
-
-
-
 }

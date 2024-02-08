@@ -24,7 +24,7 @@ data class AllTeamsData(
     val teamDescription: String,
     val adminProfile: String,
     val selectedMembers: List<SelectedMember>,
-    val selectedManager: Any?,
+    val selectedManager: SelectedManager,
     val selectedProject: SelectedProject,
 )
 
@@ -46,7 +46,6 @@ data class SelectedMember(
     val designationType: String,
     val department: String,
     val createdAt: String,
-    val updatedAt: String,
 )
 
 data class SelectedProject(
@@ -63,5 +62,26 @@ data class SelectedProject(
     val isScrap: Boolean,
     val completedPercent: Long,
     val createdAt: String,
+)
+
+data class SelectedManager(
+    val _id: String,
+    val employeeName: String,
+    val gender: String,
+    val employeeEmail: String,
+    val password: String,
+    val employeePhoneNumber: String,
+    val dateOfBirth: String,
+    val address: String,
+    val postOffice: String,
+    val policeStation: String,
+    val city: String,
+    val state: String,
+    val pinNumber: String,
+    val designation: String,
+    val designationType: String,
+    val department: String,
+    val createdAt: String,
     val updatedAt: String,
 )
+

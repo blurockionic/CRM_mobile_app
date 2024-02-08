@@ -95,13 +95,13 @@ class Login : AppCompatActivity() {
             }
         }
     }
-
+    //todo to correct the conflict adminId and employeeid
     private fun saveAuthToken(token: String, user: User, ) {
         val sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit();
         editor.putString("authToken", token)
         editor.putString("designationType", user.designationType)
-        editor.putString("adminId", user._id)
+        editor.putString("employeeId", user._id)
 
         editor.apply()
 

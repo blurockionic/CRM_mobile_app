@@ -5,8 +5,8 @@ import com.example.employeecrm.model.LoginRequest
 import com.example.employeecrm.model.LoginResponse
 import com.example.employeecrm.model.MyProfile
 import com.example.employeecrm.model.NewEmployee
-import com.example.employeecrm.model.ProjectDetailsRes
-import com.example.employeecrm.model.ProjectRequest
+import com.example.employeecrm.model.ProjectRequestModel
+import com.example.employeecrm.model.ProjectResponseModel
 import com.example.employeecrm.model.Success
 import com.example.employeecrm.model.TeamRequestModel
 import com.example.employeecrm.model.TeamResponseModel
@@ -29,12 +29,12 @@ interface Apis {
     suspend fun getEmployeeDetails(@Header("Cookie") token: String): Response<EmployeeDetails>
 
     @GET("api/v1/project/all")
-    suspend fun getProjectDetails(@Header("Cookie") token: String): Response<ProjectDetailsRes>
+    suspend fun getProjectDetails(@Header("Cookie") token: String): Response<ProjectResponseModel>
 
     //new project
     @POST("api/v1/project/new")
     suspend fun newProject(
-        @Body project: ProjectRequest,
+        @Body project: ProjectRequestModel,
         @Header("Cookie") token: String
     ): Response<Success>
 
@@ -59,6 +59,6 @@ interface Apis {
 
     //    get all the team
     @GET("api/v1/team/allTeams")
-    suspend fun allTeam(@Header("Cookie") token: String): Response<TeamResponseModel>
+    suspend fun getAllTeam(@Header("Cookie") token: String): Response<TeamResponseModel>
 }
 

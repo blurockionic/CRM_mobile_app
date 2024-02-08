@@ -8,9 +8,6 @@ data class LoginResponse(val success:Boolean, val message: String, val token: St
 data class EmployeeDetails(val success:Boolean, val message: String, val data: Array<Employee>)
 data class MyProfile(val success:Boolean, val message: String,  val user: User)
 
-data class ProjectDetailsRes(val success: Boolean, val message: String, val allProject: MutableList<Project>)
-
-
 data class Success(val success: Boolean, val message: String)
 
 
@@ -51,20 +48,7 @@ data class Employee(
 )
 
 //project data class
-data class Project(
-    val _id: String,
-    val projectName: String,
-    val projectStartDate: String,
-    val projectEndDate: String,
-    val priority: String,
-    val description: String,
-    val adminId: String,
-    val managerId: String,
-    val websiteUrl: String,
-    val isCompleted: Boolean,
-    val isScrap: Boolean,
-    val completedPercent: Int,
-)
+
 
 //new project data class
 data class ProjectRequest(
