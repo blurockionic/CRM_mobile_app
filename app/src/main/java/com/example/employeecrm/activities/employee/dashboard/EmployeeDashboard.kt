@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.employeecrm.R
 import com.example.employeecrm.activities.admin.employee.EmployeeList
+import com.example.employeecrm.activities.employee.leave.Leave
 import com.example.employeecrm.base.BaseActivity
 import com.example.employeecrm.databinding.ActivityEmployeeDashboardBinding
 import com.example.employeecrm.model.LoginManager
@@ -37,8 +38,11 @@ class EmployeeDashboard : BaseActivity() {
                 R.id.logout->{
                     logout()
                 }
+                R.id.leave->{
+                    startActivity(Intent(this@EmployeeDashboard, Leave::class.java))
+                }
                 else->{
-                    //
+
                 }
             }
 

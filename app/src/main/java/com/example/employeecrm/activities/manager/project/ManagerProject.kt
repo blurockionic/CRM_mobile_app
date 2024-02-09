@@ -67,7 +67,7 @@ class ManagerProject : BaseActivity() {
                          Log.d("responseSuccess", i.selectedManager._id)
                          if (i.selectedManager._id == employeeId){
                               myTeam.add(i);
-                    Log.d("responseSuccess",myTeam.toString())
+                             Log.d("responseSuccess",myTeam.toString())
                          }
                     }
 

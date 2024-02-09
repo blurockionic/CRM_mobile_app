@@ -18,6 +18,9 @@
         android:theme="@style/Theme.EmployeeCRM"
         tools:targetApi="31">
         <activity
+            android:name=".activities.employee.leave.Leave"
+            android:exported="false" />
+        <activity
             android:name=".activities.manager.project.AssignTask"
             android:exported="false" />
         <activity
